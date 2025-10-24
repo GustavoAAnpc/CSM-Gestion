@@ -1,4 +1,4 @@
-﻿using CSM_Gestion.Backend.Data.Interface;
+﻿using CSM_Gestion.Backend.Data.UnitOfWork;
 using CSM_Gestion.Backend.DTOs.Request;
 using CSM_Gestion.Backend.Enums;
 using CSM_Gestion.Backend.Models;
@@ -19,6 +19,10 @@ namespace CSM_Gestion.Backend.Services.Impl
         }
         public async Task<Result<Guid>> RegistrarFormulario(AsociadoRequest request)
         {
+            if(request is null)
+            {
+                return Result<Guid>.Failure("El formulario no puede ser nulo.");
+            }
             var dniExists = await _UoW.AsociadoRepository.DniExisteAsync(request.Dni);
             if (dniExists)
             {
@@ -39,7 +43,44 @@ namespace CSM_Gestion.Backend.Services.Impl
             {
                 return Result<Guid>.Failure("El número de RUC ya está registrado.");
             }
+            var dniConyugeExists = await _UoW.AsociadoRepository.DniExisteAsync(request.Conyuge.Dni);
+            if (dniConyugeExists)
+            {
+                return Result<Guid>.Failure("El DNI del cónyuge ya está registrado.");
+            }
+            if (request.Hijos != null && request.Hijos.Any())
+            {
+                foreach (var hijo in request.Hijos)
+                {
+                    var dniHijoExiste = await _UoW.HijoRepository.DniExiste(hijo.Dni);
+                    if (dniHijoExiste)
+                    {
+                        return Result<Guid>.Failure($"El DNI del hijo '{hijo.Nombre}' ya está registrado.");
+                    }
+                }
+            }
 
+            if (request.FechaNacimiento > DateOnly.FromDateTime(_DateTimeProvider.FechaHoraActual().Date))
+            {
+                return Result<Guid>.Failure("La fecha de nacimiento no puede ser una fecha futura.");
+            }
+
+            if (request.Conyuge != null && request.Conyuge.FechaNacimiento > DateOnly.FromDateTime(_DateTimeProvider.FechaHoraActual().Date))
+            {
+                return Result<Guid>.Failure("La fecha de nacimiento del cónyuge no puede ser una fecha futura.");
+            }
+
+            if (request.Hijos != null)
+            {
+                foreach (var hijo in request.Hijos)
+                {
+                    if (hijo.FechaNacimiento > DateOnly.FromDateTime(_DateTimeProvider.FechaHoraActual().Date))
+                    {
+                        return Result<Guid>.Failure($"La fecha de nacimiento del hijo '{hijo.Nombre}' no puede ser futura.");
+                    }
+                }
+            }
+            
             var conyuge = Conyuge.Create(
                 request.Conyuge.Nombre,
                 request.Conyuge.ApellidoPaterno,

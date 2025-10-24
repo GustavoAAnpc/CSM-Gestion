@@ -162,6 +162,7 @@ namespace CSM_Gestion.Backend.Models
 
             if (fechaRegistro > DateTime.UtcNow)
                 return Result<Asociado>.Failure("La fecha de registro no puede ser una fecha futura.");
+
             var asociado = new Asociado
             {
                 AsociadoId = asociadoId,
