@@ -1,4 +1,4 @@
-using CSM_Gestion.Backend.Data;
+﻿using CSM_Gestion.Backend.Data;
 using CSM_Gestion.Backend.Data.Interface;
 using CSM_Gestion.Backend.Data.Repository;
 using CSM_Gestion.Backend.Service.Interface;
@@ -10,20 +10,23 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Agregar controladores
 builder.Services.AddControllers();
 
-//DbContext PostGresSql
+// Configurar conexión a PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DataBase");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
-//Repositorios
+
+// Repositorios
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAsociadoRepository, AsociadoRepository>();
 
-//Services
+// Servicios
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<IAsociadoService, AsociadoService>();
+
 
 builder.Services.AddControllers()
     .AddFluentValidation(config =>
@@ -34,23 +37,12 @@ builder.Services.AddControllers()
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
+
 
 app.MapControllers();
 
