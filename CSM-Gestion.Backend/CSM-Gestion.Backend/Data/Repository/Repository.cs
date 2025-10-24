@@ -1,4 +1,6 @@
-﻿namespace CSM_Gestion.Backend.Data
+﻿using CSM_Gestion.Backend.Data.Interface;
+
+namespace CSM_Gestion.Backend.Data.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {

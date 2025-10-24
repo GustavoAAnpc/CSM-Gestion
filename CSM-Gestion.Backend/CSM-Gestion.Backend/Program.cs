@@ -1,6 +1,7 @@
 ﻿using CSM_Gestion.Backend.Data;
 using CSM_Gestion.Backend.Data.Interface;
 using CSM_Gestion.Backend.Data.Repository;
+using CSM_Gestion.Backend.Data.UnitOfWork;
 using CSM_Gestion.Backend.Service.Interface;
 using CSM_Gestion.Backend.Services.Impl;
 using CSM_Gestion.Backend.Services.Interface;
@@ -22,6 +23,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAsociadoRepository, AsociadoRepository>();
+builder.Services.AddScoped<IHijoRepository, HijoRepository>();
+builder.Services.AddScoped<IConyugeRepository, ConyugeRepository>();
 
 // Servicios
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
