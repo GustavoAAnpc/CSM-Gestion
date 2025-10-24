@@ -20,13 +20,13 @@
         public string Nacionalidad { get; set; }
         public string EstadoCivil { get; set; }
         public string GradoInstruccion { get; set; }
-        public string NumeroLibretaMilitar { get; set; }
-        public string NumeroRuc { get; set; }
+        public string? NumeroLibretaMilitar { get; set; } = null;
+        public string? NumeroRuc { get; set; } = null;
         public string FotoAsociado { get; set; }
         public DateTime FechaRegistro { get; set; }
         public string FotoVoucher { get; set; }
         public string FotoFirma { get; set; }
         public string Estado { get; set; }
-        public DateTime FechaAprobacion { get; set; }
+        public DateTime? FechaAprobacion { get; set; } = null;
     }
 }

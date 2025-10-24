@@ -5,6 +5,6 @@ namespace CSM_Gestion.Backend.Service.Interface
 {
     public interface IAsociadoService
     {
-        Result<Guid> RegistrarFormulario(FormularioAsociadoRequest request);
+        Task<Result<Guid>> RegistrarFormulario(FormularioAsociadoRequest request);
     }
 }
