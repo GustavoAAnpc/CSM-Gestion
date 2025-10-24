@@ -1,0 +1,6 @@
+@CSM_Gestion.Backend_HostAddress = http://localhost:5261
+
+GET {{CSM_Gestion.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
