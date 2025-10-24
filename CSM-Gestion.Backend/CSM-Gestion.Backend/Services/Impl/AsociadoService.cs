@@ -19,7 +19,27 @@ namespace CSM_Gestion.Backend.Services.Impl
         }
         public async Task<Result<Guid>> RegistrarFormulario(AsociadoRequest request)
         {
-            //pondremos validaciones con Validator mas adelante
+            var dniExists = await _UoW.AsociadoRepository.DniExisteAsync(request.Dni);
+            if (dniExists)
+            {
+                return Result<Guid>.Failure("El DNI ya está registrado.");
+            }
+            var celularExists = await _UoW.AsociadoRepository.NumeroCelularExisteAsync(request.NumeroCelular);
+            if (celularExists)
+            {
+                return Result<Guid>.Failure("El número de celular ya está registrado.");
+            }
+            var emailExists = await _UoW.AsociadoRepository.EmailExisteAsync(request.CorreoActual);
+            if (emailExists)
+            {
+                return Result<Guid>.Failure("El correo electrónico ya está registrado.");
+            }
+            var rucExiste = await _UoW.AsociadoRepository.NumeroRucExisteAsync(request.NumeroRuc);
+            if (!string.IsNullOrWhiteSpace(request.NumeroRuc) && rucExiste)
+            {
+                return Result<Guid>.Failure("El número de RUC ya está registrado.");
+            }
+
             var conyuge = Conyuge.Create(
                 request.Conyuge.Nombre,
                 request.Conyuge.ApellidoPaterno,

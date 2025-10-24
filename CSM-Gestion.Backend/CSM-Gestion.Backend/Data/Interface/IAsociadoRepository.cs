@@ -6,5 +6,9 @@ namespace CSM_Gestion.Backend.Data.Interface
     {
         Task<Asociado?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task AddAsync(Asociado asociado);
+        Task<bool> DniExisteAsync(string dni);
+        Task<bool> NumeroCelularExisteAsync(string numeroCelular);
+        Task<bool> EmailExisteAsync(string email);
+        Task<bool> NumeroRucExisteAsync(string numeroRuc);
     }
 }
