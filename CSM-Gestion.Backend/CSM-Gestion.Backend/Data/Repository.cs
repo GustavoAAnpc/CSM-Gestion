@@ -1,9 +1,9 @@
 ﻿namespace CSM_Gestion.Backend.Data
 {
-    public abstract class Repository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         public readonly AppDbContext _context;
-        protected Repository(AppDbContext context)
+        public Repository(AppDbContext context)
         {
             _context = context;
         }
@@ -15,5 +15,6 @@
         {
             return await _context.Set<T>().FindAsync(id);
         }
+
     }
 }

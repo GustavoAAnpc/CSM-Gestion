@@ -5,8 +5,8 @@ namespace CSM_Gestion.Backend.Data.Repository
 {
     public class AsociadoRepository : IAsociadoRepository
     {
-        private readonly Repository<Asociado> _repository;
-        public AsociadoRepository(Repository<Asociado> repository)
+        private readonly IRepository<Asociado> _repository;
+        public AsociadoRepository(IRepository<Asociado> repository)
         {
             _repository = repository;
         }

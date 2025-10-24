@@ -1,8 +1,8 @@
 ﻿namespace CSM_Gestion.Backend.DTOs.Request
 {
-    public sealed record FormularioAsociadoRequest(
+    public sealed record AsociadoRequest(
         string Nombre,
-        string ApelldioPaterno,
+        string ApellidoPaterno,
         string ApellidoMaterno,
         DateOnly FechaNacimiento,
         string Genero,
@@ -22,6 +22,9 @@
         string NumeroRuc,
         string FotoAsociado,
         string FotoVoucher,
-        string FotoFirma
+        string FotoFirma,
+
+        ConyugeRequest Conyuge,
+        List<HijoRequest>? Hijos
         );
 }

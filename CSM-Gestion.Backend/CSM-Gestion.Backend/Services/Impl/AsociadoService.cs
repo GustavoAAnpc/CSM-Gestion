@@ -5,7 +5,6 @@ using CSM_Gestion.Backend.Models;
 using CSM_Gestion.Backend.Service.Interface;
 using CSM_Gestion.Backend.Services.Interface;
 using CSM_Gestion.Backend.Utils;
-using System.Threading.Tasks;
 
 namespace CSM_Gestion.Backend.Services.Impl
 {
@@ -18,41 +17,58 @@ namespace CSM_Gestion.Backend.Services.Impl
             _UoW = uoW;
             _DateTimeProvider = dateTimProvider;
         }
-        public async Task<Result<Guid>> RegistrarFormulario(FormularioAsociadoRequest request)
+        public async Task<Result<Guid>> RegistrarFormulario(AsociadoRequest request)
         {
             //pondremos validaciones con Validator mas adelante
-            var asociado = new Asociado()
-            {
-                AsociadoId = Guid.NewGuid(),
-                Nombre = request.Nombre,
-                ApellidoPaterno = request.ApelldioPaterno,
-                ApellidoMaterno = request.ApellidoMaterno,
-                FechaNacimiento = request.FechaNacimiento,
-                Genero = request.Genero,
-                Dni = request.Dni,
-                Departamento = request.Departamento,
-                Provincia = request.provincia,
-                Distrito = request.Distrito,
-                Direccion = request.Direccion,
-                BaseZonal = request.BaseZonal,
-                NumeroCelular = request.NumeroCelular,
-                CorreoActual = request.CorreoActual,
-                Ocupacion = request.Ocupacion,
-                Nacionalidad = request.Nacionalidad,
-                EstadoCivil = request.EstadoCivil,
-                GradoInstruccion = request.GradoInstruccion,
-                NumeroLibretaMilitar = request.NumeroLibretaMilitar,
-                NumeroRuc = request.NumeroRuc,
-                FotoAsociado = request.FotoAsociado,
-                FechaRegistro = _DateTimeProvider.FechaHoraActual(),
-                FotoVoucher = request.FotoVoucher,
-                FotoFirma = request.FotoFirma,
-                Estado = Estado.Pendiente.ToString(),
-                FechaAprobacion = null
-            };
-            await _UoW.AsociadoRepository.AddAsync(asociado);
+            var conyuge = Conyuge.Create(
+                request.Conyuge.Nombre,
+                request.Conyuge.ApellidoPaterno,
+                request.Conyuge.ApellidoMaterno,
+                request.Conyuge.Dni,
+                request.Conyuge.FechaNacimiento,
+                request.Conyuge.GradoEstudios);
+
+            var hijos = request.Hijos?.Select(hijoRequest => Hijo.Create(
+                hijoRequest.Nombre,
+                hijoRequest.Dni,
+                hijoRequest.Genero,
+                hijoRequest.FechaNacimiento,
+                hijoRequest.GradoEstudios
+            )).ToList();
+
+            var asociado = Asociado.Create(
+                Guid.NewGuid(),
+                request.Nombre,
+                request.ApellidoPaterno,
+                request.ApellidoMaterno,
+                request.FechaNacimiento,
+                request.Genero,
+                request.Dni,
+                request.Departamento,
+                request.provincia,
+                request.Distrito,
+                request.Direccion,
+                request.BaseZonal,
+                request.NumeroCelular,
+                request.CorreoActual,
+                request.Ocupacion,
+                request.Nacionalidad,
+                request.EstadoCivil,
+                request.GradoInstruccion,
+                string.IsNullOrWhiteSpace(request.NumeroLibretaMilitar) ? null : request.NumeroLibretaMilitar,
+                string.IsNullOrWhiteSpace(request.NumeroRuc) ? null : request.NumeroRuc,
+                request.FotoAsociado,
+                _DateTimeProvider.FechaHoraActual(),
+                request.FotoVoucher,
+                request.FotoFirma,
+                Estado.Pendiente.ToString(),
+                null,
+                conyuge.Value,
+                hijos?.Select(h => h.Value).ToList()
+                );
+            await _UoW.AsociadoRepository.AddAsync(asociado.Value);
             await _UoW.SaveChangesAsync();
-            return Result<Guid>.Success(asociado.AsociadoId);
+            return Result<Guid>.Success(asociado.Value.AsociadoId);
         }
     }
 }
