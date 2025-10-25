@@ -13,6 +13,7 @@ namespace CSM_Gestion.Backend.Data
         public DbSet<Asociado> Asociados { get; set; }
         public DbSet<Conyuge> Conyuges { get; set; }
         public DbSet<Hijo> Hijos { get; set; }
+        public DbSet<Administrador> Administrador { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

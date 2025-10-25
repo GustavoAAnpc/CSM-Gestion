@@ -8,16 +8,19 @@ namespace CSM_Gestion.Backend.Data.UnitOfWork
         public IAsociadoRepository AsociadoRepository { get; }
         public IConyugeRepository ConyugeRepository { get; }
         public IHijoRepository HijoRepository { get; }
+        public ILoginRepository LoginRepository { get; }
         public UnitOfWork(
             AppDbContext context,
             IAsociadoRepository asociadoRepository,
             IConyugeRepository conyugeRepository,
-            IHijoRepository hijoRepository)
+            IHijoRepository hijoRepository,
+            ILoginRepository loginRepository)
         {
             _context = context;
             AsociadoRepository = asociadoRepository;
             ConyugeRepository = conyugeRepository;
             HijoRepository = hijoRepository;
+            LoginRepository = loginRepository;
         }
 
 

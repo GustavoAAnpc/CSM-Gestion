@@ -7,6 +7,7 @@ namespace CSM_Gestion.Backend.Data.UnitOfWork
         IAsociadoRepository AsociadoRepository { get; }
         IConyugeRepository ConyugeRepository { get; }
         IHijoRepository HijoRepository { get; }
+        ILoginRepository LoginRepository { get; }
         Task<int> SaveChangesAsync();
     }
 }
