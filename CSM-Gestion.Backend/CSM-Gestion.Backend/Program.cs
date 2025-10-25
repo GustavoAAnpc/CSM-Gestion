@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Agregar controladores
 builder.Services.AddControllers();
 
 // Configurar conexión a PostgreSQL
@@ -30,7 +29,6 @@ builder.Services.AddScoped<IConyugeRepository, ConyugeRepository>();
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<IAsociadoService, AsociadoService>();
 
-
 builder.Services.AddControllers()
     .AddFluentValidation(config =>
     {
@@ -40,12 +38,24 @@ builder.Services.AddControllers()
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
+//CORS para permitir llamadas desde React
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
+//Configuracion CORS
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
 
 app.MapControllers();
 
