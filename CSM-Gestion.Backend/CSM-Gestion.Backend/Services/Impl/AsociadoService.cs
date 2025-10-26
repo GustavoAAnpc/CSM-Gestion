@@ -1,5 +1,6 @@
 ﻿using CSM_Gestion.Backend.Data.UnitOfWork;
 using CSM_Gestion.Backend.DTOs.Request;
+using CSM_Gestion.Backend.DTOs.Response;
 using CSM_Gestion.Backend.Enums;
 using CSM_Gestion.Backend.Models;
 using CSM_Gestion.Backend.Service.Interface;
@@ -17,6 +18,68 @@ namespace CSM_Gestion.Backend.Services.Impl
             _UoW = uoW;
             _DateTimeProvider = dateTimProvider;
         }
+
+        public async Task<Result<DatosAsociadoResponse>> MostrarDatosAsociado(BuscarAsociadoRequest request)
+        {
+            if(string.IsNullOrEmpty(request.Nombre) 
+                || string.IsNullOrEmpty(request.ApellidoPaterno) 
+                || string.IsNullOrEmpty(request.ApellidoMaterno))
+            {
+                return Result<DatosAsociadoResponse>.Failure("Todos los campos son obligatorios.");
+            }
+            var asociado = await _UoW.AsociadoRepository.GetByNombreApellidos(
+                request.Nombre,
+                request.ApellidoPaterno,
+                request.ApellidoMaterno);
+            if(asociado is null)
+            {
+                return Result<DatosAsociadoResponse>.Failure("Asociado no encontrado.");
+            }
+            var conyuge = new ConyugeRequest(
+                asociado.Conyuge.Nombre,
+                asociado.Conyuge.ApellidoPaterno,
+                asociado.Conyuge.ApellidoMaterno,
+                asociado.Conyuge.Dni,
+                asociado.Conyuge.FechaNacimiento,
+                asociado.Conyuge.Estudios
+                );
+            var hijos = asociado.Hijos?.Select(hijo => new HijoRequest(
+                hijo.Nombre,
+                hijo.Dni,
+                hijo.Genero,
+                hijo.FechaNacimiento,
+                hijo.Estudios
+                )).ToList();
+
+            var response = new DatosAsociadoResponse(
+                asociado.Nombre,
+                asociado.ApellidoPaterno,
+                asociado.ApellidoMaterno,
+                asociado.FechaNacimiento,
+                asociado.Genero,
+                asociado.Dni,
+                asociado.Departamento,
+                asociado.Provincia,
+                asociado.Distrito,
+                asociado.Direccion,
+                asociado.BaseZonal,
+                asociado.NumeroCelular,
+                asociado.CorreoActual,
+                asociado.Ocupacion,
+                asociado.Nacionalidad,
+                asociado.EstadoCivil,
+                asociado.GradoInstruccion,
+                asociado.LibretaMilitar,
+                asociado.NumeroRuc,
+                asociado.FotoAsociado,
+                asociado.FotoVoucher,
+                asociado.FotoFirma,
+                conyuge,
+                hijos
+                );
+            return Result<DatosAsociadoResponse>.Success(response);
+        }
+
         public async Task<Result<Guid>> RegistrarFormulario(AsociadoRequest request)
         {
             if(request is null)

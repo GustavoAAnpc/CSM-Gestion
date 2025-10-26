@@ -19,7 +19,7 @@ namespace CSM_Gestion.Backend.Models
 
         [Required, MaxLength(100)]
         [Column("nombre")]
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         [MaxLength(8)]
         [Column("dni")]

@@ -23,6 +23,22 @@ namespace CSM_Gestion.Backend.Data.Repository
             return await _repository.GetByIdAsync(id, cancellationToken);
         }
 
+        public async Task<Asociado?> GetByNombreApellidos(string nombre, string apellidoPaterno, string apellidoMaterno)
+        {
+            nombre = nombre.Trim().ToLower();
+            apellidoPaterno = apellidoPaterno.Trim().ToLower();
+            apellidoMaterno = apellidoMaterno.Trim().ToLower();
+
+            return await _context.Asociados
+                .Include(a => a.Conyuge)  
+                .Include(a => a.Hijos)    
+                .FirstOrDefaultAsync(a =>
+                    a.Nombre.ToLower() == nombre &&
+                    a.ApellidoPaterno.ToLower() == apellidoPaterno &&
+                    a.ApellidoMaterno.ToLower() == apellidoMaterno);
+        }
+
+
         public async Task<bool> NumeroCelularExisteAsync(string numeroCelular) => await _context.Asociados.AnyAsync(a => a.NumeroCelular == numeroCelular);
         public async Task<bool> NumeroRucExisteAsync(string numeroRuc) => await _context.Asociados.AnyAsync(a => a.NumeroRuc == numeroRuc);
     }
