@@ -24,11 +24,14 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAsociadoRepository, AsociadoRepository>();
 builder.Services.AddScoped<IHijoRepository, HijoRepository>();
 builder.Services.AddScoped<IConyugeRepository, ConyugeRepository>();
+builder.Services.AddScoped<IAdministradorRepository, AdministradorRepository>();
 
 // Servicios
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<IAsociadoService, AsociadoService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
+// Fluent Validation
 builder.Services.AddControllers()
     .AddFluentValidation(config =>
     {

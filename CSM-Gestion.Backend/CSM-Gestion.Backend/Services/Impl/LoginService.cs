@@ -43,7 +43,7 @@ namespace CSM_Gestion.Backend.Services.Impl
 
         public async Task<Result<TokenResponse>> Login(LoginRequest request)
         {
-            var admin = await _UoW.LoginRepository.GetAdministradorByCredentials(request.usuario, request.password);
+            var admin = await _UoW.AdministradorRepository.GetAdministradorByCredentials(request.usuario, request.password);
             if(admin is null)
             {
                 return Result<TokenResponse>.Failure("Credenciales inválidas.");
