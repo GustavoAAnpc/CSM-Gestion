@@ -18,6 +18,18 @@ namespace CSM_Gestion.Backend.Data.Repository
 
         public async Task<bool> EmailExisteAsync(string email) => await _context.Asociados.AnyAsync(a => a.CorreoActual == email);
 
+        public async Task<IEnumerable<Asociado?>> GetAsociadoByInput(string nombre)
+        {
+            if (string.IsNullOrWhiteSpace(nombre))
+                return Enumerable.Empty<Asociado>();
+
+            nombre = nombre.Trim().ToLower();
+
+            return await _context.Asociados
+                .Where(a => a.Nombre.ToLower().Contains(nombre))
+                .ToListAsync();
+        }
+
         public async Task<Asociado?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await _repository.GetByIdAsync(id, cancellationToken);

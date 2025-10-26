@@ -19,6 +19,25 @@ namespace CSM_Gestion.Backend.Services.Impl
             _DateTimeProvider = dateTimProvider;
         }
 
+        public async Task<Result<List<InputAsociadoResponse>>> BuscarAsociadosPorNombre(string nombre)
+        {
+            if (string.IsNullOrEmpty(nombre))
+            {
+                return Result<List<InputAsociadoResponse>>.Failure("El nombre no puede estar vacío.");
+            }
+            var asociados = await _UoW.AsociadoRepository.GetAsociadoByInput(nombre);
+            if (asociados is null || !asociados.Any())
+            {
+                return Result<List<InputAsociadoResponse>>.Failure("No se encontraron asociados.");
+            }
+            var response = asociados.Select(a => new InputAsociadoResponse(
+                a.Nombre,
+                a.ApellidoPaterno,
+                a.ApellidoMaterno
+            ));
+            return Result<List<InputAsociadoResponse>>.Success(response.ToList());
+        }
+
         public async Task<Result<DatosAsociadoResponse>> MostrarDatosAsociado(BuscarAsociadoRequest request)
         {
             if(string.IsNullOrEmpty(request.Nombre) 

@@ -46,5 +46,18 @@ namespace CSM_Gestion.Backend.Controllers
             var successResponse = ApiResponse<object>.Success(result.Value, "Datos del asociado obtenidos correctamente");
             return Ok(successResponse);
         }
+        [Authorize]
+        [HttpGet("buscarPorNombre")]
+        public async Task<IActionResult> BuscarAsociadosPorNombre([FromBody] InputNombreAsociadoRequest request)
+        {
+            var result = await _asociadoService.BuscarAsociadosPorNombre(request.Nombre);
+            if (!result.IsSuccess)
+            {
+                var response = ApiResponse<object>.Fail(result.ErrorMessage);
+                return BadRequest(response);
+            }
+            var successResponse = ApiResponse<object>.Success(result.Value, "Asociados encontrados correctamente");
+            return Ok(successResponse);
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace CSM_Gestion.Backend.Data.Interface
         Task<bool> EmailExisteAsync(string email);
         Task<bool> NumeroRucExisteAsync(string numeroRuc);
         Task<Asociado?> GetByNombreApellidos(string nombre, string apellidoPaterno, string apellidoMaterno);
+        Task<IEnumerable<Asociado?>>GetAsociadoByInput(string input);//TODO: esto es para realizar la busqueda para el input
     }
 }
