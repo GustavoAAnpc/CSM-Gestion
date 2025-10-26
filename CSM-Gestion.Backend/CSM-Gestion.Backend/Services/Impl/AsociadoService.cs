@@ -2,6 +2,7 @@
 using CSM_Gestion.Backend.DTOs.Request;
 using CSM_Gestion.Backend.DTOs.Response;
 using CSM_Gestion.Backend.Enums;
+using CSM_Gestion.Backend.Helpers;
 using CSM_Gestion.Backend.Models;
 using CSM_Gestion.Backend.Service.Interface;
 using CSM_Gestion.Backend.Services.Interface;
@@ -37,6 +38,65 @@ namespace CSM_Gestion.Backend.Services.Impl
             ));
             return Result<List<InputAsociadoResponse>>.Success(response.ToList());
         }
+
+        public async Task<Result<PaginacionResponse<DatosFormularioAsociadoResponse>>> ListaAsociadosPorEstado(
+            string estado, int numeroPagina, int tamanioPagina)
+        {
+            var asociados = await _UoW.AsociadoRepository.GetAllByEstado(estado);
+
+            if (asociados == null || !asociados.Any())
+                return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Failure("No se encontraron asociados con ese estado.");
+
+            var response = asociados.Select(a => new DatosFormularioAsociadoResponse(
+                a.AsociadoId,
+                a.Nombre,
+                a.ApellidoPaterno,
+                a.ApellidoMaterno,
+                a.FechaNacimiento,
+                a.Genero,
+                a.Dni,
+                a.Departamento,
+                a.Provincia,
+                a.Distrito,
+                a.Direccion,
+                a.BaseZonal,
+                a.NumeroCelular,
+                a.CorreoActual,
+                a.Ocupacion,
+                a.Nacionalidad,
+                a.EstadoCivil,
+                a.GradoInstruccion,
+                a.LibretaMilitar,
+                a.NumeroRuc,
+                a.FotoAsociado,
+                a.FotoVoucher,
+                a.FotoFirma,
+                a.FechaRegistro,
+                a.Estado,
+                a.Conyuge is not null
+                    ? new ConyugeRequest(
+                        a.Conyuge.Nombre,
+                        a.Conyuge.ApellidoPaterno,
+                        a.Conyuge.ApellidoMaterno,
+                        a.Conyuge.Dni,
+                        a.Conyuge.FechaNacimiento,
+                        a.Conyuge.Estudios
+                      )
+                    : null,
+                a.Hijos?.Select(h => new HijoRequest(
+                        h.Nombre,
+                        h.Dni,
+                        h.Genero,
+                        h.FechaNacimiento,
+                        h.Estudios
+                    )).ToList()
+            )).ToList();
+
+            var pagina = PaginacionHelper.Paginar(response, numeroPagina, tamanioPagina);
+            return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Success(pagina);
+        }
+
+
 
         public async Task<Result<DatosAsociadoResponse>> MostrarDatosAsociado(BuscarAsociadoRequest request)
         {

@@ -18,6 +18,15 @@ namespace CSM_Gestion.Backend.Data.Repository
 
         public async Task<bool> EmailExisteAsync(string email) => await _context.Asociados.AnyAsync(a => a.CorreoActual == email);
 
+        public async Task<IEnumerable<Asociado?>> GetAllByEstado(string estado)//TODO: este metodo es para buscar a todos los asociados por estado
+        {
+            return await _context.Asociados
+                .Where(a => a.Estado == estado)
+                .Include(a => a.Conyuge)
+                .Include(a => a.Hijos)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Asociado?>> GetAsociadoByInput(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))
