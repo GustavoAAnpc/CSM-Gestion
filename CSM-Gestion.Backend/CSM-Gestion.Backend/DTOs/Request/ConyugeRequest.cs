@@ -6,7 +6,7 @@
         string ApellidoPaterno,
         string ApellidoMaterno,
         string Dni,
-        DateOnly FechaNacimiento,
+        DateOnly? FechaNacimiento,
         string GradoEstudios
         );
 }

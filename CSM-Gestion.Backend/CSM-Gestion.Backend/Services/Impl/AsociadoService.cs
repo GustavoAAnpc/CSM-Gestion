@@ -1,6 +1,8 @@
 ﻿using CSM_Gestion.Backend.Data.UnitOfWork;
 using CSM_Gestion.Backend.DTOs.Request;
+using CSM_Gestion.Backend.DTOs.Response;
 using CSM_Gestion.Backend.Enums;
+using CSM_Gestion.Backend.Helpers;
 using CSM_Gestion.Backend.Models;
 using CSM_Gestion.Backend.Service.Interface;
 using CSM_Gestion.Backend.Services.Interface;
@@ -17,6 +19,165 @@ namespace CSM_Gestion.Backend.Services.Impl
             _UoW = uoW;
             _DateTimeProvider = dateTimProvider;
         }
+
+        public async Task<Result<AprobacionSolicitudResponse>> AprobarSolicitudAsociado(Guid asociadoId)
+        {
+            var solicitud = await _UoW.AsociadoRepository.GetByIdAsync(asociadoId);
+            if (solicitud is null)
+            {
+                return Result<AprobacionSolicitudResponse>.Failure("La solicitud no existe.");
+            }
+            if(solicitud.Estado != Estado.Pendiente.ToString())
+            {
+                return Result<AprobacionSolicitudResponse>.Failure("La solicitud no está en estado pendiente.");
+            }
+
+            var aprobado = await _UoW.AsociadoRepository.AprobarSolicitud(asociadoId);
+            if (!aprobado)
+            {
+                return Result<AprobacionSolicitudResponse>.Failure("No se pudo aprobar la solicitud.");
+            }
+            await _UoW.SaveChangesAsync();
+            var asociadoIdResponse = new AprobacionSolicitudResponse(
+                solicitud.AsociadoId,
+                solicitud.Estado,
+                _DateTimeProvider.FechaHoraActual()
+                );
+            return Result<AprobacionSolicitudResponse>.Success(asociadoIdResponse);
+        }
+
+        public async Task<Result<List<InputAsociadoResponse>>> BuscarAsociadosPorNombre(string nombre) 
+        { 
+            if (string.IsNullOrEmpty(nombre)) 
+            { 
+                return Result<List<InputAsociadoResponse>>.Failure("El nombre no puede estar vacío.");
+            } 
+            var asociados = await _UoW.AsociadoRepository.GetAsociadoByInput(nombre); 
+            if (asociados is null || !asociados.Any()) 
+            {
+                return Result<List<InputAsociadoResponse>>.Failure("No se encontraron asociados."); 
+            } 
+            var response = asociados.Select(a => new InputAsociadoResponse(a.Nombre, a.ApellidoPaterno, a.ApellidoMaterno));
+            return Result<List<InputAsociadoResponse>>.Success(response.ToList()); 
+        }
+        public async Task<Result<PaginacionResponse<DatosFormularioAsociadoResponse>>> ListaAsociadosPorEstado(
+            string estado, int numeroPagina, int tamanioPagina)
+        {
+            var asociados = await _UoW.AsociadoRepository.GetAllByEstado(estado);
+
+            if (asociados == null || !asociados.Any())
+                return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Failure("No se encontraron asociados con ese estado.");
+
+            var response = asociados.Select(a => new DatosFormularioAsociadoResponse(
+                a.AsociadoId,
+                a.Nombre,
+                a.ApellidoPaterno,
+                a.ApellidoMaterno,
+                a.FechaNacimiento,
+                a.Genero,
+                a.Dni,
+                a.Departamento,
+                a.Provincia,
+                a.Distrito,
+                a.Direccion,
+                a.BaseZonal,
+                a.NumeroCelular,
+                a.CorreoActual,
+                a.Ocupacion,
+                a.Nacionalidad,
+                a.EstadoCivil,
+                a.GradoInstruccion,
+                a.LibretaMilitar,
+                a.NumeroRuc,
+                a.FotoAsociado,
+                a.FotoVoucher,
+                a.FotoFirma,
+                a.FechaRegistro,
+                a.Estado,
+                a.Conyuge is not null
+                    ? new ConyugeRequest(
+                        a.Conyuge.Nombre,
+                        a.Conyuge.ApellidoPaterno,
+                        a.Conyuge.ApellidoMaterno,
+                        a.Conyuge.Dni,
+                        a.Conyuge.FechaNacimiento,
+                        a.Conyuge.Estudios
+                      )
+                    : null,
+                a.Hijos?.Select(h => new HijoRequest(
+                        h.Nombre,
+                        h.Dni,
+                        h.Genero,
+                        h.FechaNacimiento,
+                        h.Estudios
+                    )).ToList()
+            )).ToList();
+
+            var pagina = PaginacionHelper.Paginar(response, numeroPagina, tamanioPagina);
+            return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Success(pagina);
+        }
+
+        public async Task<Result<DatosAsociadoResponse>> MostrarDatosAsociado(BuscarAsociadoRequest request)
+        {
+            if(string.IsNullOrEmpty(request.Nombre) 
+                || string.IsNullOrEmpty(request.ApellidoPaterno) 
+                || string.IsNullOrEmpty(request.ApellidoMaterno))
+            {
+                return Result<DatosAsociadoResponse>.Failure("Todos los campos son obligatorios.");
+            }
+            var asociado = await _UoW.AsociadoRepository.GetByNombreApellidos(
+                request.Nombre,
+                request.ApellidoPaterno,
+                request.ApellidoMaterno);
+            if(asociado is null)
+            {
+                return Result<DatosAsociadoResponse>.Failure("Asociado no encontrado.");
+            }
+            var conyuge = new ConyugeRequest(
+                asociado.Conyuge.Nombre,
+                asociado.Conyuge.ApellidoPaterno,
+                asociado.Conyuge.ApellidoMaterno,
+                asociado.Conyuge.Dni,
+                asociado.Conyuge.FechaNacimiento,
+                asociado.Conyuge.Estudios
+                );
+            var hijos = asociado.Hijos?.Select(hijo => new HijoRequest(
+                hijo.Nombre,
+                hijo.Dni,
+                hijo.Genero,
+                hijo.FechaNacimiento,
+                hijo.Estudios
+                )).ToList();
+
+            var response = new DatosAsociadoResponse(
+                asociado.Nombre,
+                asociado.ApellidoPaterno,
+                asociado.ApellidoMaterno,
+                asociado.FechaNacimiento,
+                asociado.Genero,
+                asociado.Dni,
+                asociado.Departamento,
+                asociado.Provincia,
+                asociado.Distrito,
+                asociado.Direccion,
+                asociado.BaseZonal,
+                asociado.NumeroCelular,
+                asociado.CorreoActual,
+                asociado.Ocupacion,
+                asociado.Nacionalidad,
+                asociado.EstadoCivil,
+                asociado.GradoInstruccion,
+                asociado.LibretaMilitar,
+                asociado.NumeroRuc,
+                asociado.FotoAsociado,
+                asociado.FotoVoucher,
+                asociado.FotoFirma,
+                conyuge,
+                hijos
+                );
+            return Result<DatosAsociadoResponse>.Success(response);
+        }
+
         public async Task<Result<Guid>> RegistrarFormulario(AsociadoRequest request)
         {
             if(request is null)
