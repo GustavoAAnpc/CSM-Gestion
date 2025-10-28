@@ -73,7 +73,19 @@ namespace CSM_Gestion.Backend.Controllers
             }
             return Ok(ApiResponse<object>.Success(result.Value, "Asociados obtenidos correctamente"));
         }
+        [Authorize]
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> ActualizarEstadoAsociado(Guid id)
+        {
+            var result = await _asociadoService.AprobarSolicitudAsociado(id);
+            if (!result.IsSuccess)
+            {
+                var response = ApiResponse<object>.Fail(result.ErrorMessage);
+                return BadRequest(response);
+            }
+            var successResponse = ApiResponse<object>.Success(result.Value, "Solicitud Aprobada");
+            return Ok(successResponse);
 
-
+        }
     }
 }

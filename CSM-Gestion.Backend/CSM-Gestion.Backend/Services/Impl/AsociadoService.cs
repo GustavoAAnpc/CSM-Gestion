@@ -20,25 +20,46 @@ namespace CSM_Gestion.Backend.Services.Impl
             _DateTimeProvider = dateTimProvider;
         }
 
-        public async Task<Result<List<InputAsociadoResponse>>> BuscarAsociadosPorNombre(string nombre)
+        public async Task<Result<AprobacionSolicitudResponse>> AprobarSolicitudAsociado(Guid asociadoId)
         {
-            if (string.IsNullOrEmpty(nombre))
+            var solicitud = await _UoW.AsociadoRepository.GetByIdAsync(asociadoId);
+            if (solicitud is null)
             {
-                return Result<List<InputAsociadoResponse>>.Failure("El nombre no puede estar vacío.");
+                return Result<AprobacionSolicitudResponse>.Failure("La solicitud no existe.");
             }
-            var asociados = await _UoW.AsociadoRepository.GetAsociadoByInput(nombre);
-            if (asociados is null || !asociados.Any())
+            if(solicitud.Estado != Estado.Pendiente.ToString())
             {
-                return Result<List<InputAsociadoResponse>>.Failure("No se encontraron asociados.");
+                return Result<AprobacionSolicitudResponse>.Failure("La solicitud no está en estado pendiente.");
             }
-            var response = asociados.Select(a => new InputAsociadoResponse(
-                a.Nombre,
-                a.ApellidoPaterno,
-                a.ApellidoMaterno
-            ));
-            return Result<List<InputAsociadoResponse>>.Success(response.ToList());
+
+            var aprobado = await _UoW.AsociadoRepository.AprobarSolicitud(asociadoId);
+            if (!aprobado)
+            {
+                return Result<AprobacionSolicitudResponse>.Failure("No se pudo aprobar la solicitud.");
+            }
+            await _UoW.SaveChangesAsync();
+            var asociadoIdResponse = new AprobacionSolicitudResponse(
+                solicitud.AsociadoId,
+                solicitud.Estado,
+                _DateTimeProvider.FechaHoraActual()
+                );
+            return Result<AprobacionSolicitudResponse>.Success(asociadoIdResponse);
         }
 
+        public async Task<Result<List<InputAsociadoResponse>>> BuscarAsociadosPorNombre(string nombre) 
+        { 
+            if (string.IsNullOrEmpty(nombre)) 
+            { 
+                return Result<List<InputAsociadoResponse>>.Failure("El nombre no puede estar vacío.");
+            } 
+            var asociados = await _UoW.AsociadoRepository.GetAsociadoByInput(nombre); 
+            if (asociados is null || !asociados.Any()) 
+            {
+                return Result<List<InputAsociadoResponse>>.Failure("No se encontraron asociados."); 
+            } 
+            var response = asociados.Select(a => new InputAsociadoResponse(a.Nombre, a.ApellidoPaterno, a.ApellidoMaterno));
+            return Result<List<InputAsociadoResponse>>.Success(response.ToList()); 
+        }
         public async Task<Result<PaginacionResponse<DatosFormularioAsociadoResponse>>> ListaAsociadosPorEstado(
             string estado, int numeroPagina, int tamanioPagina)
         {
@@ -95,8 +116,6 @@ namespace CSM_Gestion.Backend.Services.Impl
             var pagina = PaginacionHelper.Paginar(response, numeroPagina, tamanioPagina);
             return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Success(pagina);
         }
-
-
 
         public async Task<Result<DatosAsociadoResponse>> MostrarDatosAsociado(BuscarAsociadoRequest request)
         {
