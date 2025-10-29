@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export default function Home() {
   return (
     <div className="p-8 text-center">
@@ -5,4 +6,12 @@ export default function Home() {
       <p className="mt-4 text-lg">Bienvenido al frontend</p>
     </div>
   );
+=======
+export default function HijosPage() {
+    return <>
+    
+    <h1>Hola Admin</h1>
+    
+    </>;
+>>>>>>> c573350 (cambios en el frontend correccion que lo hice en el backend xd)
 }
