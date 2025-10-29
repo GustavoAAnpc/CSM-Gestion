@@ -109,7 +109,7 @@ namespace CSM_Gestion.Backend.Models
         // Relaciones
         public Conyuge? Conyuge { get; set; }
 
-        public ICollection<Hijo> Hijos { get; set; } = new List<Hijo>();
+        public ICollection<Hijo>? Hijos { get; set; } = new List<Hijo>();
 
         private Asociado() { }
         public static Result<Asociado> Create(

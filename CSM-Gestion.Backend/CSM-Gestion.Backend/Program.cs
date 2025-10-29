@@ -7,7 +7,10 @@ using CSM_Gestion.Backend.Services.Impl;
 using CSM_Gestion.Backend.Services.Interface;
 using CSM_Gestion.Backend.Validators;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,11 +27,14 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAsociadoRepository, AsociadoRepository>();
 builder.Services.AddScoped<IHijoRepository, HijoRepository>();
 builder.Services.AddScoped<IConyugeRepository, ConyugeRepository>();
+builder.Services.AddScoped<IAdministradorRepository, AdministradorRepository>();
 
 // Servicios
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<IAsociadoService, AsociadoService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
+// Fluent Validation
 builder.Services.AddControllers()
     .AddFluentValidation(config =>
     {
@@ -49,6 +55,22 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        };
+    });
+
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 //Configuracion CORS
