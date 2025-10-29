@@ -5,8 +5,9 @@ export const HttpClient = () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-        },
-        credentials: 'include', 
+        }
+        // ,
+        // credentials: 'include', 
     };
 
     try {
@@ -116,7 +117,7 @@ export const HttpClient = () => {
     return {
         get,
         post,
-        put, // <-- Agrega esta línea
+        put, 
         del,
         parseTokenData,
     };
