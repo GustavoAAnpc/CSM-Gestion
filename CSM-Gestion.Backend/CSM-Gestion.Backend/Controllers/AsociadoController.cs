@@ -74,7 +74,7 @@ namespace CSM_Gestion.Backend.Controllers
             return Ok(ApiResponse<object>.Success(result.Value, "Asociados obtenidos correctamente"));
         }
         [Authorize]
-        [HttpPatch("{id}")]
+        [HttpPatch("aprobar/{id}")]
         public async Task<IActionResult> ActualizarEstadoAsociado(Guid id)
         {
             var result = await _asociadoService.AprobarSolicitudAsociado(id);
