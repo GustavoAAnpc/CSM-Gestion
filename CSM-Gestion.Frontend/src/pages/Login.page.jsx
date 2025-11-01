@@ -26,7 +26,7 @@
                 expira: data.value.expira,
             })
             );
-            navigate("/"); // redirige con React Router
+            navigate("/home"); // redirige con React Router
         } else {
             setError(data.message || "Credenciales inválidas");
         }

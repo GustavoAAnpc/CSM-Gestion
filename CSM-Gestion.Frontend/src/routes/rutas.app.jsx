@@ -10,7 +10,7 @@ export const RutasApp = () => {
             <Routes>
                 <Route path='/login' element={<LoginPage />} />
                 <Route element={<ProtectedRoute />}>
-                    <Route path='/' element={<HomePage />} />
+                    <Route path='/home' element={<HomePage />} />
                 </Route>
             </Routes>    
         </BrowserRouter>
