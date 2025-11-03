@@ -1,10 +1,12 @@
-import axios from 'axios';
+    import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5261/api';
+    const API_BASE_URL = 'http://localhost:7156/api'; // Actualicé el puerto según tu error
 
-class AsociadoService {
+    class AsociadoService {
     async registrarAsociado(asociadoData) {
         try {
+        console.log('Datos a enviar:', JSON.stringify(asociadoData, null, 2));
+        
         const response = await axios.post(`${API_BASE_URL}/asociado`, asociadoData, {
             headers: {
             'Content-Type': 'application/json',
@@ -12,7 +14,9 @@ class AsociadoService {
         });
         return response.data;
         } catch (error) {
-        throw new Error(error.response?.data?.message || 'Error al registrar asociado');
+        console.error('Error completo:', error);
+        console.error('Response error:', error.response?.data);
+        throw new Error(error.response?.data?.message || `Error al registrar asociado: ${error.message}`);
         }
     }
 
@@ -29,11 +33,6 @@ class AsociadoService {
         reader.onerror = error => reject(error);
         });
     }
-
-    // Función para obtener el nombre del archivo
-    getFileName(file) {
-        return file.name.toLowerCase().replace(/\s+/g, '_');
     }
-}
 
-export default new AsociadoService();
+    export default new AsociadoService();

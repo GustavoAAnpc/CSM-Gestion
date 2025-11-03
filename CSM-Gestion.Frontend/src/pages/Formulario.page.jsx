@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import asociadoService from '../services/formulario.service';
-import './FormularioAsociado.css';
+import '../pages/css/FormularioPage.css';
 
 const FormularioAsociado = () => {
   const [formData, setFormData] = useState({
