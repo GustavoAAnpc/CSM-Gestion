@@ -5,17 +5,17 @@ import { HttpClient } from "../services/http.service";
 const { post } = HttpClient();
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [usuario, setUsuario] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const [usuario, setUsuario] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(null);
 
-    try {
-      const data = await post("/auth", { usuario, password });
+        try {
+        const data = await post("/auth", { usuario, password });
 
         if (data.isSuccess && data.value?.token) {
             sessionStorage.setItem(
