@@ -250,20 +250,16 @@ namespace CSM_Gestion.Backend.Services.Impl
 
             if (request.Conyuge is not null)
             {
-                var resultConyuge = Conyuge.Create(
+                conyuge = Conyuge.Create(
                     request.Conyuge.Nombre,
                     request.Conyuge.ApellidoPaterno,
                     request.Conyuge.ApellidoMaterno,
                     request.Conyuge.Dni,
                     request.Conyuge.FechaNacimiento,
                     request.Conyuge.GradoEstudios
-                );
-
-                if (!resultConyuge.IsSuccess)
-                    return Result<Guid>.Failure(resultConyuge.ErrorMessage);
-
-                conyuge = resultConyuge.Value;
+                ).Value;
             }
+
 
             var hijos = request.Hijos?.Select(hijoRequest => Hijo.Create(
                 hijoRequest.Nombre,
