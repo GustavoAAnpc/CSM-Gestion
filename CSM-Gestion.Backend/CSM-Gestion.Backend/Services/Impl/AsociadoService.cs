@@ -204,10 +204,14 @@ namespace CSM_Gestion.Backend.Services.Impl
             {
                 return Result<Guid>.Failure("El número de RUC ya está registrado.");
             }
-            var dniConyugeExists = await _UoW.AsociadoRepository.DniExisteAsync(request.Conyuge.Dni);
-            if (dniConyugeExists)
+            //TODO: aqui che el conyuge puede ser nulll pq es opcional
+            if (request.Conyuge != null)
             {
-                return Result<Guid>.Failure("El DNI del cónyuge ya está registrado.");
+                var dniConyugeExists = await _UoW.AsociadoRepository.DniExisteAsync(request.Conyuge.Dni);
+                if (dniConyugeExists)
+                {
+                    return Result<Guid>.Failure("El DNI del cónyuge ya está registrado.");
+                }
             }
             if (request.Hijos != null && request.Hijos.Any())
             {
@@ -241,14 +245,25 @@ namespace CSM_Gestion.Backend.Services.Impl
                     }
                 }
             }
-            
-            var conyuge = Conyuge.Create(
-                request.Conyuge.Nombre,
-                request.Conyuge.ApellidoPaterno,
-                request.Conyuge.ApellidoMaterno,
-                request.Conyuge.Dni,
-                request.Conyuge.FechaNacimiento,
-                request.Conyuge.GradoEstudios);
+
+            Conyuge? conyuge = null;
+
+            if (request.Conyuge is not null)
+            {
+                var resultConyuge = Conyuge.Create(
+                    request.Conyuge.Nombre,
+                    request.Conyuge.ApellidoPaterno,
+                    request.Conyuge.ApellidoMaterno,
+                    request.Conyuge.Dni,
+                    request.Conyuge.FechaNacimiento,
+                    request.Conyuge.GradoEstudios
+                );
+
+                if (!resultConyuge.IsSuccess)
+                    return Result<Guid>.Failure(resultConyuge.ErrorMessage);
+
+                conyuge = resultConyuge.Value;
+            }
 
             var hijos = request.Hijos?.Select(hijoRequest => Hijo.Create(
                 hijoRequest.Nombre,
@@ -285,7 +300,7 @@ namespace CSM_Gestion.Backend.Services.Impl
                 request.FotoFirma,
                 Estado.Pendiente.ToString(),
                 null,
-                conyuge.Value,
+                conyuge,
                 hijos?.Select(h => h.Value).ToList()
                 );
             await _UoW.AsociadoRepository.AddAsync(asociado.Value);

@@ -81,13 +81,15 @@ namespace CSM_Gestion.Backend.Validators
             RuleFor(x => x.FotoFirma)
                 .NotEmpty().WithMessage("Debe adjuntar la foto de la firma.");
 
-            // 🔗 Validadores anidados
+
             RuleFor(x => x.Conyuge)
-                .SetValidator(new ConyugeRequestValidation())
+                .SetValidator(new ConyugeRequestValidation()!)
                 .When(x => x.Conyuge is not null);
 
             RuleForEach(x => x.Hijos)
-                .SetValidator(new HijoRequestValidation());
+                .SetValidator(new HijoRequestValidation())
+                .When(x => x.Hijos is not null);
+
         }
     }
 }
