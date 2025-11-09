@@ -1,10 +1,10 @@
-    import { useNavigate } from "react-router-dom";
-    import { useState } from "react";
-    import { HttpClient } from "../services/http.service";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { HttpClient } from "../services/http.service";
 
-    const { post } = HttpClient();
+const { post } = HttpClient();
 
-    export default function Login() {
+export default function Login() {
     const navigate = useNavigate();
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
