@@ -24,7 +24,7 @@
         string FotoVoucher,
         string FotoFirma,
 
-        ConyugeRequest Conyuge,
+        ConyugeRequest? Conyuge,
         List<HijoRequest>? Hijos
         );
 }
