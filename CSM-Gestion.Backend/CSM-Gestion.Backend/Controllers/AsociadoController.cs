@@ -46,7 +46,7 @@ namespace CSM_Gestion.Backend.Controllers
             return Ok(successResponse);
         }
         [Authorize]
-        [HttpGet("buscarPorNombre")]
+        [HttpPost("buscarPorNombre")]
         public async Task<IActionResult> BusquedaFlexibleAsociados([FromBody] InputNombreAsociadoRequest request)
         {
             var result = await _asociadoService.BuscarAsociadosPorNombre(request.Nombre);
