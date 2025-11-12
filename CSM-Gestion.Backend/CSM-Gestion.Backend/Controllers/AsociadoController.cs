@@ -32,7 +32,7 @@ namespace CSM_Gestion.Backend.Controllers
             return Ok(successResponse);
         }
         [Authorize]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> BuscarAsociadoPorNombreApellidos([FromBody]BuscarAsociadoRequest request)
         {
             var result = await _asociadoService.MostrarDatosAsociado(request);
