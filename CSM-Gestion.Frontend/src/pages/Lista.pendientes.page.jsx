@@ -3,13 +3,12 @@ import ListaService from "../services/lista.service";
 import '../pages/css/ListaPendientes.css';
 
 const ListaAsociadosPorEstado = () => {
-    const [estado] = useState("Pendiente");  // Puedes hacerlo dinámico si quieres
+    const [estado] = useState("Pendiente");
     const [pagina, setPagina] = useState(1);
     const [tamanio, setTamanio] = useState(5);
     const [data, setData] = useState(null);
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState("");
-    const [asociadoSeleccionado, setAsociadoSeleccionado] = useState(null);
 
     const cargarData = async () => {
         setCargando(true);
@@ -22,12 +21,12 @@ const ListaAsociadosPorEstado = () => {
             );
 
             if (response.isSuccess) {
-                setData(response.value);
+                setData(response.value);  // value contiene items, totalPaginas, etc
             } else {
                 setError(response.message);
             }
         } catch (err) {
-            setError(err.data?.message || "Error al obtener datos");
+            setError("Error al obtener datos");
         } finally {
             setCargando(false);
         }
@@ -60,39 +59,41 @@ const ListaAsociadosPorEstado = () => {
                 <p>Cargando...</p>
             ) : data ? (
                 <div className="contenido">
-
-                    {/* TABLA */}
+                    
                     <div className="tabla-container">
-                        <table className="tabla-asociados">
+                        <table className="table">
                             <thead>
                                 <tr>
-                                    <th>Nombre</th>
-                                    <th>DNI</th>
-                                    <th>Departamento</th>
+                                    <th style={{ display: "none" }}>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Género</th>
+                                    <th>Fecha Registro</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 {data.items.map((a) => (
-                                    <tr
-                                        key={a.asociadoId}
-                                        onClick={() => setAsociadoSeleccionado(a)}
-                                        className={
-                                            asociadoSeleccionado?.asociadoId === a.asociadoId
-                                                ? "fila-seleccionada"
-                                                : ""
-                                        }
-                                    >
-                                        <td>{a.nombre} {a.apellidoPaterno}</td>
-                                        <td>{a.dni}</td>
-                                        <td>{a.departamento}</td>
+                                    <tr key={a.asociadoId}>
+                                        <td style={{ display: "none" }}>{a.asociadoId}</td>
+
+                                        <td>{`${a.nombre} ${a.apellidoPaterno} ${a.apellidoMaterno}`}</td>
+
+                                        <td>
+                                            {a.genero === "Masculino" ? (
+                                                <i className="fa-solid fa-person"></i>
+                                            ) : (
+                                                <i className="fa-solid fa-person-dress"></i>
+                                            )}
+                                        </td>
+
+                                        <td>{new Date(a.fechaRegistro).toLocaleDateString()}</td>
                                         <td>{a.estado}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
 
-                        {/* Paginación */}
                         <div className="paginacion">
                             <button disabled={pagina === 1} onClick={anterior}>
                                 Anterior
@@ -116,30 +117,6 @@ const ListaAsociadosPorEstado = () => {
                                 <option value={10}>10</option>
                             </select>
                         </div>
-                    </div>
-
-                    {/* DETALLE */}
-                    <div className="detalle-box">
-                        {asociadoSeleccionado ? (
-                            <div>
-                                <h3>Detalle del Asociado</h3>
-                                <p><strong>Nombre:</strong> {asociadoSeleccionado.nombre} {asociadoSeleccionado.apellidoPaterno} {asociadoSeleccionado.apellidoMaterno}</p>
-                                <p><strong>DNI:</strong> {asociadoSeleccionado.dni}</p>
-                                <p><strong>Dirección:</strong> {asociadoSeleccionado.direccion}</p>
-                                <p><strong>Celular:</strong> {asociadoSeleccionado.numeroCelular}</p>
-                                <p><strong>Correo:</strong> {asociadoSeleccionado.correoActual}</p>
-
-                                {asociadoSeleccionado.conyuge && (
-                                    <>
-                                        <h4>Cónyuge</h4>
-                                        <p><strong>Nombre:</strong> {asociadoSeleccionado.conyuge.nombre}</p>
-                                        <p><strong>DNI:</strong> {asociadoSeleccionado.conyuge.dni}</p>
-                                    </>
-                                )}
-                            </div>
-                        ) : (
-                            <p className="no-detalle">Selecciona un asociado</p>
-                        )}
                     </div>
                 </div>
             ) : (
