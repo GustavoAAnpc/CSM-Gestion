@@ -23,8 +23,8 @@ const BuscarAsociado = () => {
         setAsociadoSeleccionado(null);
 
         try {
-            // CAMBIO: Usar POST en lugar de GET
-            const data = await httpClient.post('/api/asociado/buscarPorNombre', { 
+            
+            const data = await httpClient.post('/asociado/buscarPorNombre', { 
                 Nombre: nombre 
             });
             
@@ -47,7 +47,7 @@ const BuscarAsociado = () => {
 
         try {
             // CAMBIO: Usar POST en lugar de GET
-            const data = await httpClient.post('/api/asociado', {
+            const data = await httpClient.post('/asociado', {
                 nombre: asociado.nombre,
                 apellidoPaterno: asociado.apellidoPaterno,
                 apellidoMaterno: asociado.apellidoMaterno
