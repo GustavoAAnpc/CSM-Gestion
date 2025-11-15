@@ -32,7 +32,7 @@ namespace CSM_Gestion.Backend.Controllers
             return Ok(successResponse);
         }
         [Authorize]
-        [HttpPost]
+        [HttpPost("buscarPorNombreApellidos")]
         public async Task<IActionResult> BuscarAsociadoPorNombreApellidos([FromBody]BuscarAsociadoRequest request)
         {
             var result = await _asociadoService.MostrarDatosAsociado(request);
@@ -45,7 +45,7 @@ namespace CSM_Gestion.Backend.Controllers
             var successResponse = ApiResponse<object>.Success(result.Value, "Datos del asociado obtenidos correctamente");
             return Ok(successResponse);
         }
-        [Authorize]
+        [Authorize] 
         [HttpPost("buscarPorNombre")]
         public async Task<IActionResult> BusquedaFlexibleAsociados([FromBody] InputNombreAsociadoRequest request)
         {
