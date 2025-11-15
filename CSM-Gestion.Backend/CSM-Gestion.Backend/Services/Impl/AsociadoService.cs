@@ -65,52 +65,23 @@ namespace CSM_Gestion.Backend.Services.Impl
         {
             var asociados = await _UoW.AsociadoRepository.GetAllByEstado(estado);
 
-            if (asociados == null || !asociados.Any())
+            if (asociados == null)
+            {
                 return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Failure("No se encontraron asociados con ese estado.");
-
+            }
+            if (!asociados.Any())
+            {
+                return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Failure("No hay asociados con ese estado.");
+            }
             var response = asociados.Select(a => new DatosFormularioAsociadoResponse(
                 a.AsociadoId,
                 a.Nombre,
                 a.ApellidoPaterno,
                 a.ApellidoMaterno,
-                a.FechaNacimiento,
                 a.Genero,
                 a.Dni,
-                a.Departamento,
-                a.Provincia,
-                a.Distrito,
-                a.Direccion,
-                a.BaseZonal,
-                a.NumeroCelular,
-                a.CorreoActual,
-                a.Ocupacion,
-                a.Nacionalidad,
-                a.EstadoCivil,
-                a.GradoInstruccion,
-                a.LibretaMilitar,
-                a.NumeroRuc,
-                a.FotoAsociado,
-                a.FotoVoucher,
-                a.FotoFirma,
                 a.FechaRegistro,
-                a.Estado,
-                a.Conyuge is not null
-                    ? new ConyugeRequest(
-                        a.Conyuge.Nombre,
-                        a.Conyuge.ApellidoPaterno,
-                        a.Conyuge.ApellidoMaterno,
-                        a.Conyuge.Dni,
-                        a.Conyuge.FechaNacimiento,
-                        a.Conyuge.Estudios
-                      )
-                    : null,
-                a.Hijos?.Select(h => new HijoRequest(
-                        h.Nombre,
-                        h.Dni,
-                        h.Genero,
-                        h.FechaNacimiento,
-                        h.Estudios
-                    )).ToList()
+                a.Estado
             )).ToList();
 
             var pagina = PaginacionHelper.Paginar(response, numeroPagina, tamanioPagina);
@@ -129,6 +100,7 @@ namespace CSM_Gestion.Backend.Services.Impl
                 request.Nombre,
                 request.ApellidoPaterno,
                 request.ApellidoMaterno);
+
             if(asociado is null)
             {
                 return Result<DatosAsociadoResponse>.Failure("Asociado no encontrado.");
@@ -150,6 +122,7 @@ namespace CSM_Gestion.Backend.Services.Impl
                 )).ToList();
 
             var response = new DatosAsociadoResponse(
+                asociado.AsociadoId,
                 asociado.Nombre,
                 asociado.ApellidoPaterno,
                 asociado.ApellidoMaterno,
@@ -176,6 +149,60 @@ namespace CSM_Gestion.Backend.Services.Impl
                 hijos
                 );
             return Result<DatosAsociadoResponse>.Success(response);
+        }
+
+        public async Task<Result<DatosAsociadoResponse>> MostrarSolicitud(Guid asociadoId)
+        {
+            if(asociadoId == Guid.Empty)
+            {
+                return Result<DatosAsociadoResponse>.Failure("El ID del asociado no puede estar vacío.");
+            }
+            var asociado =  await _UoW.AsociadoRepository.GetAsociadoIncludsByIdAsync(asociadoId);
+            if(asociado is null)
+            {
+                return Result<DatosAsociadoResponse>.Failure("Asociado no encontrado.");
+            }
+            var datos = new DatosAsociadoResponse(
+                asociado.AsociadoId,
+                asociado.Nombre,
+                asociado.ApellidoPaterno,
+                asociado.ApellidoMaterno,
+                asociado.FechaNacimiento,
+                asociado.Genero,
+                asociado.Dni,
+                asociado.Departamento,
+                asociado.Provincia,
+                asociado.Distrito,
+                asociado.Direccion,
+                asociado.BaseZonal,
+                asociado.NumeroCelular,
+                asociado.CorreoActual,
+                asociado.Ocupacion,
+                asociado.Nacionalidad,
+                asociado.EstadoCivil,
+                asociado.GradoInstruccion,
+                asociado.LibretaMilitar,
+                asociado.NumeroRuc,
+                asociado.FotoAsociado,
+                asociado.FotoVoucher,
+                asociado.FotoFirma,
+                new ConyugeRequest(
+                    asociado.Conyuge.Nombre,
+                    asociado.Conyuge.ApellidoPaterno,
+                    asociado.Conyuge.ApellidoMaterno,
+                    asociado.Conyuge.Dni,
+                    asociado.Conyuge.FechaNacimiento,
+                    asociado.Conyuge.Estudios
+                    ),
+                asociado.Hijos?.Select(hijo => new HijoRequest(
+                    hijo.Nombre,
+                    hijo.Dni,
+                    hijo.Genero,
+                    hijo.FechaNacimiento,
+                    hijo.Estudios
+                    )).ToList()
+                );
+            return Result<DatosAsociadoResponse>.Success(datos);
         }
 
         public async Task<Result<Guid>> RegistrarFormulario(AsociadoRequest request)

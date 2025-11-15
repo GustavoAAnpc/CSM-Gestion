@@ -3,6 +3,7 @@
 namespace CSM_Gestion.Backend.DTOs.Response
 {
     public sealed record DatosAsociadoResponse(
+        Guid AsociadoId,
         string Nombre,
         string ApellidoPaterno,
         string ApellidoMaterno,
