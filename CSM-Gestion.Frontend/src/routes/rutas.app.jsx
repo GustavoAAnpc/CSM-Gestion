@@ -3,6 +3,7 @@ import { HomePage } from '../pages/Home.page';
 import LoginPage from "../pages/Login.page.jsx";
 import { ProtectedRoute } from './protected.route';
 import FormularioPage from '../pages/Formulario.page.jsx';
+import BuscarAsociado from '../pages/Consulta.page.jsx';
 
 export const RutasApp = () => {
     return (
@@ -12,6 +13,7 @@ export const RutasApp = () => {
                 <Route path='/registro' element={<FormularioPage />} />
                 <Route element={<ProtectedRoute />}>
                     <Route path='/home' element={<HomePage />} />
+                    <Route path='/buscar' element={<BuscarAsociado />} />
                 </Route>
             </Routes>    
         </BrowserRouter>
