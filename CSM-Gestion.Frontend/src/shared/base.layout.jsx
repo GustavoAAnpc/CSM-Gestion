@@ -60,13 +60,13 @@ export const BaseLayout = ({ children }) => {
                     <div className="nav-section">
                         <div className="nav-label">Gestión</div>
                         <NavLink 
-                            to="/registro" 
+                            to="/buscar" 
                             className={({ isActive }) => 
                                 `nav-link ${isActive ? 'active' : ''}`
                             }
                         >
                             <i className="fas fa-file-medical"></i>
-                            {!isCollapsed && <span>Registrar Solicitud</span>}
+                            {!isCollapsed && <span>Consultar Asociado</span>}
                         </NavLink>
                     </div>
                 </nav>
