@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HttpClient } from "../services/http.service";
+import ConsultaService from "../services/consulta.service";
 import '../pages/css/Consulta.css';
 
 const BuscarAsociado = () => {
@@ -8,8 +8,6 @@ const BuscarAsociado = () => {
     const [asociadoSeleccionado, setAsociadoSeleccionado] = useState(null);
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState('');
-
-    const httpClient = HttpClient();
 
     const buscarAsociados = async () => {
         if (!nombre.trim()) {
@@ -23,10 +21,9 @@ const BuscarAsociado = () => {
         setAsociadoSeleccionado(null);
 
         try {
-            
-            const data = await httpClient.post('/asociado/buscarPorNombre', { 
-                Nombre: nombre 
-            });
+            console.log("BASE URL ACTUAL:", import.meta.env.VITE_API_URL); 
+            const data = await ConsultaService.buscarAsociadosPorNombre(nombre);
+
             
             if (data.isSuccess && data.value) {
                 setResultados(data.value);
@@ -46,12 +43,12 @@ const BuscarAsociado = () => {
         setError('');
 
         try {
-            // CAMBIO: Usar POST en lugar de GET
-            const data = await httpClient.post('/asociado', {
+            const data = await ConsultaService.buscarPorApellidos({
                 nombre: asociado.nombre,
                 apellidoPaterno: asociado.apellidoPaterno,
                 apellidoMaterno: asociado.apellidoMaterno
             });
+
             
             if (data.isSuccess) {
                 setAsociadoSeleccionado(data.value);
@@ -59,7 +56,6 @@ const BuscarAsociado = () => {
                 setError(data.message || 'Error al cargar datos del asociado');
             }
         } catch (err) {
-            console.error('Error al obtener asociado:', err);
             setError(err.data?.message || 'Error al cargar datos del asociado');
         } finally {
             setCargando(false);
@@ -74,7 +70,7 @@ const BuscarAsociado = () => {
 
     return (
         <div className="buscar-asociado-container">
-            {/* El resto del JSX permanece igual */}
+            
             <div className="busqueda-section">
                 <h2>Buscar Asociado</h2>
                 
