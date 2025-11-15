@@ -51,24 +51,35 @@ export const BaseLayout = ({ children }) => {
                             className={({ isActive }) => 
                                 `nav-link ${isActive ? 'active' : ''}`
                             }
-                        >
+                            data-tooltip="Inicio"
+                            >
                             <i className="fas fa-home"></i>
                             {!isCollapsed && <span>Inicio</span>}
-                        </NavLink>
-                    </div>
+                            </NavLink>
 
-                    <div className="nav-section">
-                        <div className="nav-label">Gestión</div>
-                        <NavLink 
+                            <NavLink 
                             to="/buscar" 
                             className={({ isActive }) => 
                                 `nav-link ${isActive ? 'active' : ''}`
                             }
-                        >
+                            data-tooltip="Consultar Asociado"
+                            >
                             <i className="fas fa-file-medical"></i>
                             {!isCollapsed && <span>Consultar Asociado</span>}
-                        </NavLink>
+                            </NavLink>
+
+                            <NavLink 
+                            to="/pendientes" 
+                            className={({ isActive }) => 
+                                `nav-link ${isActive ? 'active' : ''}`
+                            }
+                            data-tooltip="Solicitudes Pendientes"
+                            >
+                            <i className="fas fa-file-medical"></i>
+                            {!isCollapsed && <span>Solicitudes Pendientes</span>}
+                            </NavLink>
                     </div>
+                    
                 </nav>
 
                 <div className="sidebar-footer">

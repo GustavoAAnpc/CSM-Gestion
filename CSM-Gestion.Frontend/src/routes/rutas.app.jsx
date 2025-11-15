@@ -4,6 +4,7 @@ import LoginPage from "../pages/Login.page.jsx";
 import { ProtectedRoute } from './protected.route';
 import FormularioPage from '../pages/Formulario.page.jsx';
 import BuscarAsociado from '../pages/Consulta.page.jsx';
+import ListaPendientes from '../pages/Lista.pendientes.page.jsx'
 
 export const RutasApp = () => {
     return (
@@ -14,6 +15,7 @@ export const RutasApp = () => {
                 <Route element={<ProtectedRoute />}>
                     <Route path='/home' element={<HomePage />} />
                     <Route path='/buscar' element={<BuscarAsociado />} />
+                    <Route path='/pendientes' element={<ListaPendientes />} />
                 </Route>
             </Routes>    
         </BrowserRouter>
