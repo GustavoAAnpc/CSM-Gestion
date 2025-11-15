@@ -76,7 +76,7 @@ var app = builder.Build();
 //Configuracion CORS
 app.UseCors("AllowAll");
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
