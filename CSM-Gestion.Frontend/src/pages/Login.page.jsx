@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { HttpClient } from "../services/http.service";
+import AuthService from '../services/auth.service';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -13,8 +13,7 @@ export default function Login() {
         setError(null);
 
         try {
-            const httpClient = HttpClient(); // ✅ CORRECTO
-            const data = await httpClient.post("/auth", { usuario, password });
+            const data = await AuthService.login({ usuario, password });
 
             if (data.isSuccess && data.value?.token) {
                 sessionStorage.setItem(
