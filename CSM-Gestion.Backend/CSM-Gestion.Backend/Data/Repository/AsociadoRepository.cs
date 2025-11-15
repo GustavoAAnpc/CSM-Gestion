@@ -54,6 +54,14 @@ namespace CSM_Gestion.Backend.Data.Repository
 
         }
 
+        public Task<Asociado?> GetAsociadoIncludsByIdAsync(Guid id)
+        {
+            return _context.Asociados
+                .Include(a => a.Conyuge)
+                .Include(a => a.Hijos)
+                .FirstOrDefaultAsync(a => a.AsociadoId == id);
+        }
+
         public async Task<Asociado?> GetByIdAsync(Guid id)
         {
             return await _repository.GetByIdAsync(id);

@@ -47,7 +47,7 @@ namespace CSM_Gestion.Backend.Controllers
         }
         [Authorize] 
         [HttpPost("buscarPorNombre")]
-        public async Task<IActionResult> BusquedaFlexibleAsociados([FromBody] InputNombreAsociadoRequest request)
+        public async Task<IActionResult> BuscarAsociadoPorNombre([FromBody] InputNombreAsociadoRequest request)
         {
             var result = await _asociadoService.BuscarAsociadosPorNombre(request.Nombre);
             if (!result.IsSuccess)
@@ -60,7 +60,7 @@ namespace CSM_Gestion.Backend.Controllers
         }
         [Authorize]
         [HttpGet("estado/{estado}")]
-        public async Task<IActionResult> Listar(
+        public async Task<IActionResult> ListarPorEstado(
             string estado,
             [FromQuery] int pagina = 1,
             [FromQuery] int tamanio = 10)
@@ -75,7 +75,7 @@ namespace CSM_Gestion.Backend.Controllers
         }
         [Authorize]
         [HttpPatch("aprobar/{id}")]
-        public async Task<IActionResult> ActualizarEstadoAsociado(Guid id)
+        public async Task<IActionResult> AprobarSolicitud(Guid id)
         {
             var result = await _asociadoService.AprobarSolicitudAsociado(id);
             if (!result.IsSuccess)
@@ -84,6 +84,20 @@ namespace CSM_Gestion.Backend.Controllers
                 return BadRequest(response);
             }
             var successResponse = ApiResponse<object>.Success(result.Value, "Solicitud Aprobada");
+            return Ok(successResponse);
+
+        }
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ObtenerSolicitud(Guid id)
+        {
+            var result = await _asociadoService.MostrarSolicitud(id);
+            if (!result.IsSuccess)
+            {
+                var response = ApiResponse<object>.Fail(result.ErrorMessage);
+                return BadRequest(response);
+            }
+            var successResponse = ApiResponse<object>.Success(result.Value, "Datos de la solicitud");
             return Ok(successResponse);
 
         }
