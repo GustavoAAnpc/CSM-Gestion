@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ListaService from "../services/lista.service";
+import { useNavigate } from "react-router-dom";
 import '../pages/css/ListaPendientes.css';
 
 const ListaAsociadosPorEstado = () => {
@@ -9,6 +10,8 @@ const ListaAsociadosPorEstado = () => {
     const [data, setData] = useState(null);
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState("");
+    const navigate = useNavigate();
+
 
     const cargarData = async () => {
         setCargando(true);
@@ -48,6 +51,10 @@ const ListaAsociadosPorEstado = () => {
         }
     };
 
+    const verDetalle = (id) => {
+    navigate(`/asociado/${id}`);
+    };
+
     return (
         <div className="lista-container">
 
@@ -69,6 +76,7 @@ const ListaAsociadosPorEstado = () => {
                                     <th>Género</th>
                                     <th>Fecha Registro</th>
                                     <th>Estado</th>
+                                    <th>Acción</th>
                                 </tr>
                             </thead>
 
@@ -89,6 +97,9 @@ const ListaAsociadosPorEstado = () => {
 
                                         <td>{new Date(a.fechaRegistro).toLocaleDateString()}</td>
                                         <td>{a.estado}</td>
+                                        <td>
+                                            <button onClick={() => verDetalle(a.asociadoId)}>Ver</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

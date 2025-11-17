@@ -10,6 +10,9 @@ class ConsultaService {
     buscarPorApellidos(data) {
         return httpClient.post("/asociado/buscarPorNombreApellidos", data);
     }
+    obtenerDatosAsociado(id) {
+        return httpClient.get(`/asociado/${id}`);
+    }
 }
 
 export default new ConsultaService();
