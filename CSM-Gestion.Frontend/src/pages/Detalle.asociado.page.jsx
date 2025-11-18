@@ -61,6 +61,16 @@ export default function AsociadoDetalle() {
                 <p><strong>Género:</strong> {data.genero}</p>
                 <p><strong>Correo:</strong> {data.correoActual}</p>
                 <p><strong>Celular:</strong> {data.numeroCelular}</p>
+                <p><strong>Ocupación:</strong> {data.ocupacion}</p>
+                <p><strong>Nacionalidad:</strong> {data.nacionalidad}</p>
+                <p><strong>Estado Civil:</strong> {data.estadoCivil}</p>
+                <p><strong>Grado Instrucción:</strong> {data.gradoInstruccion}</p>
+                {data.numeroLibretaMilitar && (
+                    <p><strong>Libreta Militar:</strong> {data.numeroLibretaMilitar}</p>
+                )}
+                {data.numeroRuc && (
+                    <p><strong>RUC:</strong> {data.numeroRuc}</p>
+                )}
             </div>
 
             {/* Dirección */}
@@ -70,6 +80,7 @@ export default function AsociadoDetalle() {
                 <p><strong>Distrito:</strong> {data.distrito}</p>
                 <p><strong>Provincia:</strong> {data.provincia}</p>
                 <p><strong>Departamento:</strong> {data.departamento}</p>
+                <p><strong>Base Zonal:</strong> {data.baseZonal}</p>
             </div>
 
             {/* Documentos - Imágenes */}
@@ -126,10 +137,10 @@ export default function AsociadoDetalle() {
                 </div>
             </div>
 
-            {/* Cónyuge */}
+            {/* Cónyuge - Validación para null */}
             <div style={{ marginBottom: "20px" }}>
                 <h3>Cónyuge</h3>
-                {data.conyuge ? (
+                {data.conyuge && data.conyuge.nombre ? (
                     <>
                         <p><strong>Nombre:</strong> {data.conyuge.nombre} {data.conyuge.apellidoPaterno} {data.conyuge.apellidoMaterno}</p>
                         <p><strong>DNI:</strong> {data.conyuge.dni}</p>
@@ -141,10 +152,10 @@ export default function AsociadoDetalle() {
                 )}
             </div>
 
-            {/* Hijos */}
+            {/* Hijos - Validación para null o array vacío */}
             <div style={{ marginBottom: "20px" }}>
                 <h3>Hijos</h3>
-                {data.hijos?.length > 0 ? (
+                {data.hijos && data.hijos.length > 0 ? (
                     data.hijos.map((hijo, index) => (
                         <div key={index} style={{ 
                             border: "1px solid #ddd", 
