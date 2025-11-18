@@ -5,6 +5,7 @@ import { ProtectedRoute } from './protected.route';
 import FormularioPage from '../pages/Formulario.page.jsx';
 import BuscarAsociado from '../pages/Consulta.page.jsx';
 import ListaPendientes from '../pages/Lista.pendientes.page.jsx'
+import Detalle from '../pages/Detalle.asociado.page.jsx'
 
 export const RutasApp = () => {
     return (
@@ -16,6 +17,7 @@ export const RutasApp = () => {
                     <Route path='/home' element={<HomePage />} />
                     <Route path='/buscar' element={<BuscarAsociado />} />
                     <Route path='/pendientes' element={<ListaPendientes />} />
+                    <Route path='/asociado/:id' element={<Detalle />} />
                 </Route>
             </Routes>    
         </BrowserRouter>
