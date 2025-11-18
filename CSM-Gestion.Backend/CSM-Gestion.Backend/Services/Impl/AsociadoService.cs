@@ -162,6 +162,19 @@ namespace CSM_Gestion.Backend.Services.Impl
             {
                 return Result<DatosAsociadoResponse>.Failure("Asociado no encontrado.");
             }
+            if(asociado.FotoAsociado is null)
+            {
+                return Result<DatosAsociadoResponse>.Failure("El asociado no tiene una solicitud registrada.");
+            }
+            if(asociado.FotoFirma is null)
+            {
+                return Result<DatosAsociadoResponse>.Failure("El asociado no tiene una solicitud registrada.");
+            }
+            if(asociado.FotoVoucher is null)
+            {
+                return Result<DatosAsociadoResponse>.Failure("El asociado no tiene una solicitud registrada.");
+            }
+            //TODO: che aqui puedo que hago que si es diferente a null  haga la instnacia al obj conyuge o hijop
             var datos = new DatosAsociadoResponse(
                 asociado.AsociadoId,
                 asociado.Nombre,
@@ -186,22 +199,36 @@ namespace CSM_Gestion.Backend.Services.Impl
                 asociado.FotoAsociado,
                 asociado.FotoVoucher,
                 asociado.FotoFirma,
-                new ConyugeRequest(
-                    asociado.Conyuge.Nombre,
-                    asociado.Conyuge.ApellidoPaterno,
-                    asociado.Conyuge.ApellidoMaterno,
-                    asociado.Conyuge.Dni,
-                    asociado.Conyuge.FechaNacimiento,
-                    asociado.Conyuge.Estudios
-                    ),
-                asociado.Hijos?.Select(hijo => new HijoRequest(
-                    hijo.Nombre,
-                    hijo.Dni,
-                    hijo.Genero,
-                    hijo.FechaNacimiento,
-                    hijo.Estudios
-                    )).ToList()
+                null,
+                null
                 );
+            if(asociado.Conyuge != null)
+            {
+                datos = datos with
+                {
+                    Conyuge = new ConyugeRequest(
+                        asociado.Conyuge.Nombre,
+                        asociado.Conyuge.ApellidoPaterno,
+                        asociado.Conyuge.ApellidoMaterno,
+                        asociado.Conyuge.Dni,
+                        asociado.Conyuge.FechaNacimiento,
+                        asociado.Conyuge.Estudios
+                        )
+                };
+            }
+            if(asociado.Hijos.Count > 0)
+            {
+                datos = datos with
+                {  
+                    Hijos = asociado.Hijos.Select(hijo => new HijoRequest(
+                        hijo.Nombre,
+                        hijo.Dni,
+                        hijo.Genero,
+                        hijo.FechaNacimiento,
+                        hijo.Estudios
+                        )).ToList()
+                };
+            }
             return Result<DatosAsociadoResponse>.Success(datos);
         }
 
