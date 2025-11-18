@@ -2,11 +2,11 @@
 {
     public sealed record ConyugeRequest
     (
-        string Nombre,
-        string ApellidoPaterno,
-        string ApellidoMaterno,
-        string Dni,
+        string? Nombre,
+        string? ApellidoPaterno,
+        string? ApellidoMaterno,
+        string? Dni,
         DateOnly? FechaNacimiento,
-        string GradoEstudios
+        string? GradoEstudios
         );
 }
