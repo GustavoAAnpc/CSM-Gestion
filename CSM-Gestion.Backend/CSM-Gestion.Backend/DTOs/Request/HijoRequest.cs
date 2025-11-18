@@ -2,10 +2,10 @@
 {
     public sealed record HijoRequest
     (
-        string Nombre,
-        string Dni,
-        string Genero,
+        string? Nombre,
+        string? Dni,
+        string? Genero,
         DateOnly FechaNacimiento,
-        string GradoEstudios
+        string? GradoEstudios
         );
 }
