@@ -69,7 +69,7 @@ const BuscarAsociado = () => {
     };
 
     return (
-        <div className="buscar-asociado-container">
+        <div >
             
             <div className="busqueda-section">
                 <h2>Buscar Asociado</h2>

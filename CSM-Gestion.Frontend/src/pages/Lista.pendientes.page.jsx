@@ -58,7 +58,7 @@ const ListaAsociadosPorEstado = () => {
     return (
         <div className="lista-container">
 
-            <h2>Asociados con estado: {estado}</h2>
+            <h2>Solicitudes Pendientes</h2>
 
             {error && <div className="error-box">{error}</div>}
 
@@ -98,7 +98,12 @@ const ListaAsociadosPorEstado = () => {
                                         <td>{new Date(a.fechaRegistro).toLocaleDateString()}</td>
                                         <td>{a.estado}</td>
                                         <td>
-                                            <button onClick={() => verDetalle(a.asociadoId)}>Ver</button>
+                                            <button 
+                                                className="btn-ver outline"
+                                                onClick={() => verDetalle(a.asociadoId)}
+                                                title="Ver detalles del asociado">
+                                                Ver Detalle
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

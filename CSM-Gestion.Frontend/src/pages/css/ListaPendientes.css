@@ -211,3 +211,82 @@
     .table tbody tr:nth-child(even):hover {
     background-color: #f1f3f4;
     }
+
+    /* Estilos para el botón Ver */
+.btn-ver {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(52, 152, 219, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.btn-ver:hover {
+    background: linear-gradient(135deg, #2980b9, #1f639b);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.btn-ver:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(52, 152, 219, 0.2);
+}
+
+.btn-ver:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-ver i {
+    font-size: 12px;
+}
+
+/* Efecto de pulso al hacer hover */
+.btn-ver:hover i {
+    animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Versión con icono */
+.btn-ver.con-icono::before {
+    content: "👁️";
+    font-size: 14px;
+}
+
+/* Versión outline */
+.btn-ver.outline {
+    background: transparent;
+    border: 2px solid #3498db;
+    color: #3498db;
+}
+
+.btn-ver.outline:hover {
+    background: #3498db;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .btn-ver {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: 60px;
+    }
+}

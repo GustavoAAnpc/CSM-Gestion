@@ -43,7 +43,6 @@ export default function DetalleSolicitud() {
         setCurrentImage("");
         setImageTitle("");
     };
-
     if (loading) return <div className="cargando-detalle">Cargando...</div>;
     if (error) return <div className="error-detalle">{error}</div>;
     if (!data) return <div className="sin-datos">No hay información del asociado.</div>;
