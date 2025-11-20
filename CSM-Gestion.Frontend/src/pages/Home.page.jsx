@@ -1,7 +1,7 @@
 import '../pages/css/HomePage.css';
 export const HomePage = () => {
     return (
-        <div className="home-container">
+        <div    >
             <div className="home-card">
                 <h1 className="home-title">Centro Social Mollebamba</h1>
                 <p className="home-subtitle">Sistema de Gestión Administrativa</p>

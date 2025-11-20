@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ConsultaService from "../services/consulta.service";
+import './css/DetalleSolicitud.css';
 
-export default function AsociadoDetalle() {
+export default function DetalleSolicitud() {
     const { id } = useParams();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -42,62 +43,112 @@ export default function AsociadoDetalle() {
         setCurrentImage("");
         setImageTitle("");
     };
-
-    if (loading) return <p>Cargando...</p>;
-    if (error) return <p>{error}</p>;
-    if (!data) return <p>No hay información del asociado.</p>;
+    if (loading) return <div className="cargando-detalle">Cargando...</div>;
+    if (error) return <div className="error-detalle">{error}</div>;
+    if (!data) return <div className="sin-datos">No hay información del asociado.</div>;
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="asociado-detalle-container">
             <h2>Información de la Solicitud</h2>
 
             {/* Información básica */}
-            <div style={{ marginBottom: "20px" }}>
+            <div className="detalle-seccion">
                 <h3>Datos Personales</h3>
-                <p><strong>ID:</strong> {data.asociadoId}</p>
-                <p><strong>Nombre:</strong> {data.nombre} {data.apellidoPaterno} {data.apellidoMaterno}</p>
-                <p><strong>DNI:</strong> {data.dni}</p>
-                <p><strong>Fecha Nacimiento:</strong> {data.fechaNacimiento}</p>
-                <p><strong>Género:</strong> {data.genero}</p>
-                <p><strong>Correo:</strong> {data.correoActual}</p>
-                <p><strong>Celular:</strong> {data.numeroCelular}</p>
-                <p><strong>Ocupación:</strong> {data.ocupacion}</p>
-                <p><strong>Nacionalidad:</strong> {data.nacionalidad}</p>
-                <p><strong>Estado Civil:</strong> {data.estadoCivil}</p>
-                <p><strong>Grado Instrucción:</strong> {data.gradoInstruccion}</p>
-                {data.numeroLibretaMilitar && (
-                    <p><strong>Libreta Militar:</strong> {data.numeroLibretaMilitar}</p>
-                )}
-                {data.numeroRuc && (
-                    <p><strong>RUC:</strong> {data.numeroRuc}</p>
-                )}
+                <div className="datos-grid">
+                    <div className="dato-item">
+                        <strong>ID</strong>
+                        <p>{data.asociadoId}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Nombre Completo</strong>
+                        <p>{data.nombre} {data.apellidoPaterno} {data.apellidoMaterno}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>DNI</strong>
+                        <p>{data.dni}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Fecha Nacimiento</strong>
+                        <p>{data.fechaNacimiento}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Género</strong>
+                        <p>{data.genero}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Correo</strong>
+                        <p>{data.correoActual}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Celular</strong>
+                        <p>{data.numeroCelular}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Ocupación</strong>
+                        <p>{data.ocupacion}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Nacionalidad</strong>
+                        <p>{data.nacionalidad}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Estado Civil</strong>
+                        <p>{data.estadoCivil}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Grado Instrucción</strong>
+                        <p>{data.gradoInstruccion}</p>
+                    </div>
+                    {data.numeroLibretaMilitar && (
+                        <div className="dato-item">
+                            <strong>Libreta Militar</strong>
+                            <p>{data.numeroLibretaMilitar}</p>
+                        </div>
+                    )}
+                    {data.numeroRuc && (
+                        <div className="dato-item">
+                            <strong>RUC</strong>
+                            <p>{data.numeroRuc}</p>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Dirección */}
-            <div style={{ marginBottom: "20px" }}>
+            <div className="detalle-seccion">
                 <h3>Dirección</h3>
-                <p><strong>Dirección:</strong> {data.direccion}</p>
-                <p><strong>Distrito:</strong> {data.distrito}</p>
-                <p><strong>Provincia:</strong> {data.provincia}</p>
-                <p><strong>Departamento:</strong> {data.departamento}</p>
-                <p><strong>Base Zonal:</strong> {data.baseZonal}</p>
+                <div className="datos-grid">
+                    <div className="dato-item">
+                        <strong>Dirección</strong>
+                        <p>{data.direccion}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Distrito</strong>
+                        <p>{data.distrito}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Provincia</strong>
+                        <p>{data.provincia}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Departamento</strong>
+                        <p>{data.departamento}</p>
+                    </div>
+                    <div className="dato-item">
+                        <strong>Base Zonal</strong>
+                        <p>{data.baseZonal}</p>
+                    </div>
+                </div>
             </div>
 
             {/* Documentos - Imágenes */}
-            <div style={{ marginBottom: "20px" }}>
+            <div className="detalle-seccion">
                 <h3>Documentos Adjuntos</h3>
-                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                <div className="documentos-container">
                     {data.fotoAsociado && (
                         <button 
                             onClick={() => openImageModal(data.fotoAsociado, "Foto del Asociado")}
-                            style={{
-                                padding: "10px 15px",
-                                backgroundColor: "#007bff",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "5px",
-                                cursor: "pointer"
-                            }}
+                            className="doc-btn doc-btn-foto"
                         >
                             📷 Ver Foto Asociado
                         </button>
@@ -106,14 +157,7 @@ export default function AsociadoDetalle() {
                     {data.fotoVoucher && (
                         <button 
                             onClick={() => openImageModal(data.fotoVoucher, "Voucher")}
-                            style={{
-                                padding: "10px 15px",
-                                backgroundColor: "#28a745",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "5px",
-                                cursor: "pointer"
-                            }}
+                            className="doc-btn doc-btn-voucher"
                         >
                             💰 Ver Voucher
                         </button>
@@ -122,14 +166,7 @@ export default function AsociadoDetalle() {
                     {data.fotoFirma && (
                         <button 
                             onClick={() => openImageModal(data.fotoFirma, "Firma")}
-                            style={{
-                                padding: "10px 15px",
-                                backgroundColor: "#ffc107",
-                                color: "black",
-                                border: "none",
-                                borderRadius: "5px",
-                                cursor: "pointer"
-                            }}
+                            className="doc-btn doc-btn-firma"
                         >
                             ✍️ Ver Firma
                         </button>
@@ -137,106 +174,89 @@ export default function AsociadoDetalle() {
                 </div>
             </div>
 
-            {/* Cónyuge - Validación para null */}
-            <div style={{ marginBottom: "20px" }}>
+            {/* Cónyuge */}
+            <div className="detalle-seccion">
                 <h3>Cónyuge</h3>
                 {data.conyuge && data.conyuge.nombre ? (
-                    <>
-                        <p><strong>Nombre:</strong> {data.conyuge.nombre} {data.conyuge.apellidoPaterno} {data.conyuge.apellidoMaterno}</p>
-                        <p><strong>DNI:</strong> {data.conyuge.dni}</p>
-                        <p><strong>Fecha Nacimiento:</strong> {data.conyuge.fechaNacimiento}</p>
-                        <p><strong>Grado de Estudios:</strong> {data.conyuge.gradoEstudios}</p>
-                    </>
+                    <div className="conyuge-content">
+                        <div className="datos-grid">
+                            <div className="dato-item">
+                                <strong>Nombre</strong>
+                                <p>{data.conyuge.nombre} {data.conyuge.apellidoPaterno} {data.conyuge.apellidoMaterno}</p>
+                            </div>
+                            <div className="dato-item">
+                                <strong>DNI</strong>
+                                <p>{data.conyuge.dni}</p>
+                            </div>
+                            <div className="dato-item">
+                                <strong>Fecha Nacimiento</strong>
+                                <p>{data.conyuge.fechaNacimiento}</p>
+                            </div>
+                            <div className="dato-item">
+                                <strong>Grado de Estudios</strong>
+                                <p>{data.conyuge.gradoEstudios}</p>
+                            </div>
+                        </div>
+                    </div>
                 ) : (
-                    <p>No tiene cónyuge registrado.</p>
+                    <p className="no-data-message">No tiene cónyuge registrado.</p>
                 )}
             </div>
 
-            {/* Hijos - Validación para null o array vacío */}
-            <div style={{ marginBottom: "20px" }}>
+            {/* Hijos */}
+            <div className="detalle-seccion">
                 <h3>Hijos</h3>
                 {data.hijos && data.hijos.length > 0 ? (
-                    data.hijos.map((hijo, index) => (
-                        <div key={index} style={{ 
-                            border: "1px solid #ddd", 
-                            padding: "10px", 
-                            marginBottom: "10px", 
-                            borderRadius: "5px" 
-                        }}>
-                            <p><strong>Nombre:</strong> {hijo.nombre}</p>
-                            <p><strong>DNI:</strong> {hijo.dni}</p>
-                            <p><strong>Género:</strong> {hijo.genero}</p>
-                            <p><strong>Fecha Nacimiento:</strong> {hijo.fechaNacimiento}</p>
-                            <p><strong>Grado de Estudios:</strong> {hijo.gradoEstudios}</p>
-                        </div>
-                    ))
+                    <div className="hijos-container">
+                        {data.hijos.map((hijo, index) => (
+                            <div key={index} className="hijo-item">
+                                <div className="datos-grid">
+                                    <div className="dato-item">
+                                        <strong>Nombre</strong>
+                                        <p>{hijo.nombre}</p>
+                                    </div>
+                                    <div className="dato-item">
+                                        <strong>DNI</strong>
+                                        <p>{hijo.dni}</p>
+                                    </div>
+                                    <div className="dato-item">
+                                        <strong>Género</strong>
+                                        <p>{hijo.genero}</p>
+                                    </div>
+                                    <div className="dato-item">
+                                        <strong>Fecha Nacimiento</strong>
+                                        <p>{hijo.fechaNacimiento}</p>
+                                    </div>
+                                    <div className="dato-item">
+                                        <strong>Grado de Estudios</strong>
+                                        <p>{hijo.gradoEstudios}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 ) : (
-                    <p>No tiene hijos registrados.</p>
+                    <p className="no-data-message">No tiene hijos registrados.</p>
                 )}
             </div>
 
             {/* Modal para mostrar imágenes */}
             {modalOpen && (
-                <div style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "rgba(0,0,0,0.8)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 1000
-                }}>
-                    <div style={{
-                        backgroundColor: "white",
-                        padding: "20px",
-                        borderRadius: "10px",
-                        maxWidth: "90%",
-                        maxHeight: "90%",
-                        position: "relative"
-                    }}>
-                        <h3 style={{ marginBottom: "15px" }}>{imageTitle}</h3>
+                <div className="modal-overlay" onClick={closeModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>{imageTitle}</h3>
+                            <button className="modal-close-btn" onClick={closeModal}>
+                                ×
+                            </button>
+                        </div>
                         <img 
                             src={`data:image/jpeg;base64,${currentImage}`} 
                             alt={imageTitle}
-                            style={{ 
-                                maxWidth: "100%", 
-                                maxHeight: "70vh",
-                                display: "block"
-                            }}
+                            className="modal-image"
                         />
-                        <button 
-                            onClick={closeModal}
-                            style={{
-                                position: "absolute",
-                                top: "10px",
-                                right: "10px",
-                                backgroundColor: "#dc3545",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "50%",
-                                width: "30px",
-                                height: "30px",
-                                cursor: "pointer",
-                                fontSize: "16px"
-                            }}
-                        >
-                            ×
-                        </button>
-                        <div style={{ textAlign: "center", marginTop: "10px" }}>
-                            <button 
-                                onClick={closeModal}
-                                style={{
-                                    padding: "8px 15px",
-                                    backgroundColor: "#6c757d",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "5px",
-                                    cursor: "pointer"
-                                }}
-                            >
+                        <div className="modal-footer">
+                            <button className="modal-footer-btn" onClick={closeModal}>
                                 Cerrar
                             </button>
                         </div>
