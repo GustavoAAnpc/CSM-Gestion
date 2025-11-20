@@ -1,0 +1,210 @@
+    /* Login.css */
+    .login-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    }
+
+    .login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    transition: all 0.3s ease;
+    }
+
+    .login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+    }
+
+    .login-header h2 {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    }
+
+    .login-header p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    }
+
+    .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    }
+
+    .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    }
+
+    .form-group label {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: left;
+    }
+
+    .login-input {
+    padding: 15px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    }
+
+    .login-input:focus {
+    outline: none;
+    border-color: #3498db;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .login-input::placeholder {
+    color: #a0a0a0;
+    }
+
+    .login-btn {
+    padding: 15px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    }
+
+    .login-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #1f639b);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .login-btn:active {
+    transform: translateY(0);
+    }
+
+    .login-btn:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    }
+
+    .error-message {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+    }
+
+    /* Estilos para el logo */
+    .login-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    }
+
+    .login-logo i {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    }
+
+    .login-logo span {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+    .login-card {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+    
+    .login-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .login-input {
+        padding: 12px;
+    }
+    
+    .login-btn {
+        padding: 12px;
+    }
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    }
+
+    .login-card {
+    animation: fadeIn 0.6s ease-out;
+    }
+
+    /* Efectos de carga */
+    .loading {
+    opacity: 0.7;
+    pointer-events: none;
+    }
+
+    .loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }

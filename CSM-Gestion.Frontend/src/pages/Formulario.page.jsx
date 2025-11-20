@@ -464,7 +464,7 @@ const FormularioAsociado = () => {
             onClick={() => setMostrarConyuge(!mostrarConyuge)} 
             className="toggle-btn"
           >
-            {mostrarConyuge ? "❌ Ocultar Cónyuge" : "👤 Agregar Cónyuge"}
+            {mostrarConyuge ? "x Ocultar Cónyuge" : "+ Agregar Cónyuge"}
           </button>
         </div>
 
@@ -543,7 +543,7 @@ const FormularioAsociado = () => {
             onClick={() => setMostrarHijos(!mostrarHijos)} 
             className="toggle-btn"
           >
-            {mostrarHijos ? "❌ Ocultar Hijos" : "👨‍👧‍👦 Agregar Hijos"}
+            {mostrarHijos ? "x Ocultar Hijos" : "+ Agregar Hijos"}
           </button>
         </div>
 
@@ -560,7 +560,7 @@ const FormularioAsociado = () => {
                     onClick={() => eliminarHijo(index)} 
                     className="remove-btn"
                   >
-                    🗑️ Eliminar
+                    Eliminar
                   </button>
                 </div>
                 <div className="form-row">
@@ -616,17 +616,17 @@ const FormularioAsociado = () => {
             ))}
 
             <button type="button" onClick={agregarHijo} className="add-btn">
-              ➕ Agregar Hijo
+              + Agregar Hijo
             </button>
           </fieldset>
         )}
 
         <div className="form-actions">
           <button type="button" onClick={limpiarFormulario} className="clear-btn">
-            🗑️ Limpiar Formulario
+            Limpiar Formulario
           </button>
           <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? '⏳ Registrando...' : '✅ Registrar Asociado'}
+            {loading ? 'Registrando...' : 'Registrar Solicitud'}
           </button>
         </div>
       </form>

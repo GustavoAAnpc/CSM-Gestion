@@ -11,7 +11,7 @@ export const RutasApp = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/login' element={<LoginPage />} />
+                <Route path='/' element={<LoginPage />} />
                 <Route path='/registro' element={<FormularioPage />} />
                 <Route element={<ProtectedRoute />}>
                     <Route path='/home' element={<HomePage />} />
