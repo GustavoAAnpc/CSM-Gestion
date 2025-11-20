@@ -76,7 +76,7 @@ namespace CSM_Gestion.Backend.Controllers
         }
         [Authorize]
         [HttpPatch("solicitud/{id}")]
-        public async Task<IActionResult> ResponderSolicitud(Guid id,string estado)
+        public async Task<IActionResult> ResponderSolicitud(Guid id,[FromQuery] string estado)
         {
             if (string.IsNullOrWhiteSpace(estado))
             {
