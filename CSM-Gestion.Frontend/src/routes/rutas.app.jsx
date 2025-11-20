@@ -5,7 +5,7 @@ import { ProtectedRoute } from './protected.route';
 import FormularioPage from '../pages/Formulario.page.jsx';
 import BuscarAsociado from '../pages/Consulta.page.jsx';
 import ListaPendientes from '../pages/Lista.pendientes.page.jsx'
-import Detalle from '../pages/Detalle.asociado.page.jsx'
+import Detalle from '../pages/Detalle.solicitud.page.jsx'
 
 export const RutasApp = () => {
     return (
