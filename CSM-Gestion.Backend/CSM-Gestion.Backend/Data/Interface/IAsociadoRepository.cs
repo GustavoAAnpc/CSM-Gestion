@@ -13,7 +13,7 @@ namespace CSM_Gestion.Backend.Data.Interface
         Task<Asociado?> GetByNombreApellidos(string nombre, string apellidoPaterno, string apellidoMaterno);
         Task<IEnumerable<Asociado?>> GetAsociadoByInput(string input);
         Task<IEnumerable<Asociado?>> GetAllByEstado(string estado);
-        Task<bool> AprobarSolicitud(Guid asociadoId);
+        Task<bool> CambiarEstadoSolicitudAsync(Guid asociadoId,string estado);
         Task<Asociado?> GetAsociadoIncludsByIdAsync(Guid id);
     }
 }
