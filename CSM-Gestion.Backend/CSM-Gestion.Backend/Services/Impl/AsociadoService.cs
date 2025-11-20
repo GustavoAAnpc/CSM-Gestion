@@ -86,36 +86,43 @@ namespace CSM_Gestion.Backend.Services.Impl
 
         public async Task<Result<DatosAsociadoResponse>> MostrarDatosAsociado(BuscarAsociadoRequest request)
         {
-            if(string.IsNullOrEmpty(request.Nombre) 
-                || string.IsNullOrEmpty(request.ApellidoPaterno) 
+            if (string.IsNullOrEmpty(request.Nombre)
+                || string.IsNullOrEmpty(request.ApellidoPaterno)
                 || string.IsNullOrEmpty(request.ApellidoMaterno))
             {
                 return Result<DatosAsociadoResponse>.Failure("Todos los campos son obligatorios.");
             }
+
             var asociado = await _UoW.AsociadoRepository.GetByNombreApellidos(
                 request.Nombre,
                 request.ApellidoPaterno,
                 request.ApellidoMaterno);
 
-            if(asociado is null)
+            if (asociado is null)
             {
                 return Result<DatosAsociadoResponse>.Failure("Asociado no encontrado.");
             }
-            var conyuge = new ConyugeRequest(
-                asociado.Conyuge.Nombre,
-                asociado.Conyuge.ApellidoPaterno,
-                asociado.Conyuge.ApellidoMaterno,
-                asociado.Conyuge.Dni,
-                asociado.Conyuge.FechaNacimiento,
-                asociado.Conyuge.Estudios
+
+            ConyugeRequest? conyuge = null;
+            if (asociado.Conyuge != null)
+            {
+                conyuge = new ConyugeRequest(
+                    asociado.Conyuge.Nombre,
+                    asociado.Conyuge.ApellidoPaterno,
+                    asociado.Conyuge.ApellidoMaterno,
+                    asociado.Conyuge.Dni,
+                    asociado.Conyuge.FechaNacimiento,
+                    asociado.Conyuge.Estudios
                 );
+            }
+
             var hijos = asociado.Hijos?.Select(hijo => new HijoRequest(
                 hijo.Nombre,
                 hijo.Dni,
                 hijo.Genero,
                 hijo.FechaNacimiento,
                 hijo.Estudios
-                )).ToList();
+            )).ToList() ?? new List<HijoRequest>();
 
             var response = new DatosAsociadoResponse(
                 asociado.AsociadoId,
@@ -143,9 +150,11 @@ namespace CSM_Gestion.Backend.Services.Impl
                 asociado.FotoFirma,
                 conyuge,
                 hijos
-                );
+            );
+
             return Result<DatosAsociadoResponse>.Success(response);
         }
+
 
         public async Task<Result<DatosAsociadoResponse>> MostrarSolicitud(Guid asociadoId)
         {
