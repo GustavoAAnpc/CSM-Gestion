@@ -23,7 +23,7 @@ export const BaseLayout = ({ children }) => {
 
     const handlerLogout = () => {
         sessionStorage.removeItem('admin');
-        navigate('/login', { replace: true });
+        navigate('/', { replace: true });
     };
 
     return (
