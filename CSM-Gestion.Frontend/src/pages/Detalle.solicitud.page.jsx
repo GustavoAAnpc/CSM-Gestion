@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ConsultaService from "../services/consulta.service";
 import SolicitudService from "../services/solicitud.service";
@@ -14,6 +14,8 @@ export default function DetalleSolicitud() {
     const [imageTitle, setImageTitle] = useState("");
     const [responseModalOpen, setResponseModalOpen] = useState(false);
     const [responseData, setResponseData] = useState(null);
+    const navigate = useNavigate();
+
 
 
     useEffect(() => {
@@ -51,29 +53,41 @@ export default function DetalleSolicitud() {
     if (error) return <div className="error-detalle">{error}</div>;
     if (!data) return <div className="sin-datos">No hay información del asociado.</div>;
 
-    const responderSolicitud = async (nuevoEstado) => {
-        try {
-            setLoading(true);
+const responderSolicitud = async (nuevoEstado) => {
+    try {
+        setLoading(true);
 
-            const response = await SolicitudService.solicitudHandler(id, nuevoEstado);
+        const response = await SolicitudService.solicitudHandler(id, nuevoEstado);
 
-            if (response.data.isSuccess) {
-                // Actualiza el estado en la UI
-                setData((prev) => ({
-                    ...prev,
-                    estado: nuevoEstado
-                }));
+        console.log("RESPUESTA PATCH ===>", response);
 
-                alert(`Solicitud ${nuevoEstado} correctamente.`);
-            } else {
-                alert("No se pudo actualizar la solicitud.");
-            }
-        } catch (error) {
-            alert("Error al actualizar solicitud.");
-        } finally {
-            setLoading(false);
+        if (response.isSuccess) {
+
+            // abre modal bonito
+            setResponseData({
+                mensaje: response.message,
+                estado: response.estado,
+                fecha: response.value.fechaRespuesta
+            });
+            setResponseModalOpen(true);
+
+            // actualiza en UI
+            setData(prev => ({
+                ...prev,
+                estado: nuevoEstado
+            }));
+
+        } else {
+            alert("No se pudo actualizar la solicitud.");
         }
-    };
+    } catch (error) {
+        alert("Error al actualizar solicitud.");
+    } finally {
+        setLoading(false);
+    }
+};
+
+
 
 
     return (
@@ -308,6 +322,45 @@ export default function DetalleSolicitud() {
                     </div>
                 </div>
             )}
+
+
+            {responseModalOpen && (
+    <div className="modal-overlay" onClick={() => setResponseModalOpen(false)}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+
+            <div className="modal-header">
+                <h3>Resultado de la Solicitud</h3>
+                <button
+                    className="modal-close-btn"
+                    onClick={() => setResponseModalOpen(false)}
+                >
+                    ×
+                </button>
+            </div>
+
+            <div className="modal-body">
+                <p><strong>Mensaje:</strong> {responseData.mensaje}</p>
+                <p><strong>Estado:</strong> {responseData.estado}</p>
+                <p><strong>Fecha:</strong> {new Date(responseData.fecha).toLocaleString()}</p>
+            </div>
+
+            <div className="modal-footer">
+                <button 
+    className="modal-footer-btn" 
+    onClick={() => {
+        setResponseModalOpen(false);
+        navigate("/pendientes");
+    }}
+>
+    Cerrar
+</button>
+
+            </div>
+
+        </div>
+    </div>
+)}
+
         </div>
         
     );
