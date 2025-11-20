@@ -1,4 +1,5 @@
 ﻿using CSM_Gestion.Backend.DTOs.Request;
+using CSM_Gestion.Backend.Enums;
 using CSM_Gestion.Backend.Service.Interface;
 using CSM_Gestion.Backend.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -74,18 +75,27 @@ namespace CSM_Gestion.Backend.Controllers
             return Ok(ApiResponse<object>.Success(result.Value, "Asociados obtenidos correctamente"));
         }
         [Authorize]
-        [HttpPatch("aprobar/{id}")]
-        public async Task<IActionResult> AprobarSolicitud(Guid id)
+        [HttpPatch("solicitud/{id}")]
+        public async Task<IActionResult> ResponderSolicitud(Guid id,string estado)
         {
-            var result = await _asociadoService.AprobarSolicitudAsociado(id);
+            if (string.IsNullOrWhiteSpace(estado))
+            {
+                var response = ApiResponse<object>.Fail("El estado no puede estar vacío.");
+                return BadRequest(response);
+            }
+            if (estado != Estado.Aprobado.ToString() && estado != Estado.Rechazado.ToString())
+            {
+                var response = ApiResponse<object>.Fail("El estado debe ser 'Aprobado' o 'Rechazado'.");
+                return BadRequest(response);
+            }
+            var result = await _asociadoService.ResponderSolicitudAsociado(id, estado);
             if (!result.IsSuccess)
             {
                 var response = ApiResponse<object>.Fail(result.ErrorMessage);
                 return BadRequest(response);
             }
-            var successResponse = ApiResponse<object>.Success(result.Value, "Solicitud Aprobada");
+            var successResponse = ApiResponse<object>.Success(result.Value, $"Solicitud {estado}.");
             return Ok(successResponse);
-
         }
         [Authorize]
         [HttpGet("{id}")]
