@@ -398,3 +398,35 @@
     .asociado-detalle-container::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #2980b9, #1f639b);
     }
+
+    .acciones-solicitud {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.btn-aprobar {
+    background: #2ecc71;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-rechazar {
+    background: #e74c3c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-aprobar:hover {
+    background: #27ae60;
+}
+
+.btn-rechazar:hover {
+    background: #c0392b;
+}

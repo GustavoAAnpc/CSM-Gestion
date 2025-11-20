@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ConsultaService from "../services/consulta.service";
+import SolicitudService from "../services/solicitud.service";
 import './css/DetalleSolicitud.css';
 
 export default function DetalleSolicitud() {
@@ -11,6 +12,9 @@ export default function DetalleSolicitud() {
     const [modalOpen, setModalOpen] = useState(false);
     const [currentImage, setCurrentImage] = useState("");
     const [imageTitle, setImageTitle] = useState("");
+    const [responseModalOpen, setResponseModalOpen] = useState(false);
+    const [responseData, setResponseData] = useState(null);
+
 
     useEffect(() => {
         const load = async () => {
@@ -46,6 +50,31 @@ export default function DetalleSolicitud() {
     if (loading) return <div className="cargando-detalle">Cargando...</div>;
     if (error) return <div className="error-detalle">{error}</div>;
     if (!data) return <div className="sin-datos">No hay información del asociado.</div>;
+
+    const responderSolicitud = async (nuevoEstado) => {
+        try {
+            setLoading(true);
+
+            const response = await SolicitudService.solicitudHandler(id, nuevoEstado);
+
+            if (response.data.isSuccess) {
+                // Actualiza el estado en la UI
+                setData((prev) => ({
+                    ...prev,
+                    estado: nuevoEstado
+                }));
+
+                alert(`Solicitud ${nuevoEstado} correctamente.`);
+            } else {
+                alert("No se pudo actualizar la solicitud.");
+            }
+        } catch (error) {
+            alert("Error al actualizar solicitud.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     return (
         <div className="asociado-detalle-container">
@@ -239,6 +268,22 @@ export default function DetalleSolicitud() {
                     <p className="no-data-message">No tiene hijos registrados.</p>
                 )}
             </div>
+            <div className="acciones-solicitud">
+                <button 
+                    className="btn-aprobar"
+                    onClick={() => responderSolicitud("Aprobado")}
+                >
+                    ✔️ Aprobar
+                </button>
+
+                <button 
+                    className="btn-rechazar"
+                    onClick={() => responderSolicitud("Rechazado")}
+                >
+                    ❌ Rechazar
+                </button>
+            </div>
+
 
             {/* Modal para mostrar imágenes */}
             {modalOpen && (
@@ -264,5 +309,6 @@ export default function DetalleSolicitud() {
                 </div>
             )}
         </div>
+        
     );
 }
