@@ -20,30 +20,30 @@ namespace CSM_Gestion.Backend.Services.Impl
             _DateTimeProvider = dateTimProvider;
         }
 
-        public async Task<Result<AprobacionSolicitudResponse>> AprobarSolicitudAsociado(Guid asociadoId)
+        public async Task<Result<SolicitudResponse>> ResponderSolicitudAsociado(Guid asociadoId,string estado)
         {
             var solicitud = await _UoW.AsociadoRepository.GetByIdAsync(asociadoId);
             if (solicitud is null)
             {
-                return Result<AprobacionSolicitudResponse>.Failure("La solicitud no existe.");
+                return Result<SolicitudResponse>.Failure("La solicitud no existe.");
             }
             if(solicitud.Estado != Estado.Pendiente.ToString())
             {
-                return Result<AprobacionSolicitudResponse>.Failure("La solicitud no está en estado pendiente.");
+                return Result<SolicitudResponse>.Failure("La solicitud no está en estado pendiente.");
             }
 
-            var aprobado = await _UoW.AsociadoRepository.AprobarSolicitud(asociadoId);
+            var aprobado = await _UoW.AsociadoRepository.CambiarEstadoSolicitudAsync(asociadoId,estado);
             if (!aprobado)
             {
-                return Result<AprobacionSolicitudResponse>.Failure("No se pudo aprobar la solicitud.");
+                return Result<SolicitudResponse>.Failure("No se pudo modificar el estado de la solicitud.");
             }
             await _UoW.SaveChangesAsync();
-            var asociadoIdResponse = new AprobacionSolicitudResponse(
+            var asociadoIdResponse = new SolicitudResponse(
                 solicitud.AsociadoId,
                 solicitud.Estado,
                 _DateTimeProvider.FechaHoraActual()
                 );
-            return Result<AprobacionSolicitudResponse>.Success(asociadoIdResponse);
+            return Result<SolicitudResponse>.Success(asociadoIdResponse);
         }
 
         public async Task<Result<List<InputAsociadoResponse>>> BuscarAsociadosPorNombre(string nombre) 

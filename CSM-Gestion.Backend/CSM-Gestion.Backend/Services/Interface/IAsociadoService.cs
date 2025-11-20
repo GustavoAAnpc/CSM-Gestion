@@ -11,6 +11,6 @@ namespace CSM_Gestion.Backend.Service.Interface
         Task<Result<DatosAsociadoResponse>> MostrarSolicitud(Guid asociadoId);
         Task<Result<List<InputAsociadoResponse>>> BuscarAsociadosPorNombre(string nombre);
         Task<Result<PaginacionResponse<DatosFormularioAsociadoResponse>>> ListaAsociadosPorEstado(string estado, int numeroPagina, int tamanioPagina);
-        Task<Result<AprobacionSolicitudResponse>> AprobarSolicitudAsociado(Guid asociadoId);
+        Task<Result<SolicitudResponse>> ResponderSolicitudAsociado(Guid asociadoId, string estado);
     }
 }

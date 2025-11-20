@@ -16,15 +16,26 @@ namespace CSM_Gestion.Backend.Data.Repository
         }
         public async Task AddAsync(Asociado asociado) => await _repository.AddAsync(asociado);
 
-        public async Task<bool> AprobarSolicitud(Guid asociadoId)
+        public async Task<bool> CambiarEstadoSolicitudAsync(Guid asociadoId, string estado)
         {
             var asociado = await _repository.GetByIdAsync(asociadoId);
             if (asociado == null)
             {
                 return false;
             }
-            asociado.Estado = Estado.Aprobado.ToString();
-            _context.Update(asociado);
+            var estadoNormalizado = estado.Trim().ToLower();
+            if (estadoNormalizado == Estado.Aprobado.ToString().ToLower())
+            {
+                asociado.Estado = Estado.Aprobado.ToString();
+            }
+            else if (estadoNormalizado == Estado.Rechazado.ToString().ToLower())
+            {
+                asociado.Estado = Estado.Rechazado.ToString();
+            }
+            else
+            {
+                return false; 
+            }
             return true;
         }
 
@@ -81,7 +92,6 @@ namespace CSM_Gestion.Backend.Data.Repository
                     a.ApellidoPaterno.ToLower() == apellidoPaterno &&
                     a.ApellidoMaterno.ToLower() == apellidoMaterno);
         }
-
 
         public async Task<bool> NumeroCelularExisteAsync(string numeroCelular) => await _context.Asociados.AnyAsync(a => a.NumeroCelular == numeroCelular);
         public async Task<bool> NumeroRucExisteAsync(string numeroRuc) => await _context.Asociados.AnyAsync(a => a.NumeroRuc == numeroRuc);
