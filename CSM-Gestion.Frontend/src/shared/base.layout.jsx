@@ -47,7 +47,7 @@ export const BaseLayout = ({ children }) => {
                     <div className="nav-section">
                         <div className="nav-label">Principal</div>
                         <NavLink 
-                            to="/home" 
+                            to="/inicio" 
                             className={({ isActive }) => 
                                 `nav-link ${isActive ? 'active' : ''}`
                             }
@@ -120,9 +120,9 @@ export const BaseLayout = ({ children }) => {
 
 function getPageTitle(pathname) {
     const titles = {
-        '/home': 'Inicio',
-        '/registro': 'Registrar Solicitud',
-        '/mascotas': 'Gestión de Mascotas'
+        '/inicio': 'Inicio',
+        '/buscar': 'Buscar Asociado',
+        '/pendientes': 'Solicitudes Pendientes'
     };
     return titles[pathname] || 'Centro Social Mollebamba';
 }

@@ -14,7 +14,7 @@ export const RutasApp = () => {
                 <Route path='/' element={<LoginPage />} />
                 <Route path='/registro' element={<FormularioPage />} />
                 <Route element={<ProtectedRoute />}>
-                    <Route path='/home' element={<HomePage />} />
+                    <Route path='/inicio' element={<HomePage />} />
                     <Route path='/buscar' element={<BuscarAsociado />} />
                     <Route path='/pendientes' element={<ListaPendientes />} />
                     <Route path='/asociado/:id' element={<Detalle />} />

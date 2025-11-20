@@ -193,7 +193,7 @@ const responderSolicitud = async (nuevoEstado) => {
                             onClick={() => openImageModal(data.fotoAsociado, "Foto del Asociado")}
                             className="doc-btn doc-btn-foto"
                         >
-                            📷 Ver Foto Asociado
+                            Ver Foto
                         </button>
                     )}
                     
@@ -202,7 +202,7 @@ const responderSolicitud = async (nuevoEstado) => {
                             onClick={() => openImageModal(data.fotoVoucher, "Voucher")}
                             className="doc-btn doc-btn-voucher"
                         >
-                            💰 Ver Voucher
+                            Ver Voucher
                         </button>
                     )}
                     
@@ -211,7 +211,7 @@ const responderSolicitud = async (nuevoEstado) => {
                             onClick={() => openImageModal(data.fotoFirma, "Firma")}
                             className="doc-btn doc-btn-firma"
                         >
-                            ✍️ Ver Firma
+                            ver Firma
                         </button>
                     )}
                 </div>
