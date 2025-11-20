@@ -61,18 +61,11 @@ namespace CSM_Gestion.Backend.Services.Impl
             return Result<List<InputAsociadoResponse>>.Success(response.ToList()); 
         }
         public async Task<Result<PaginacionResponse<DatosFormularioAsociadoResponse>>> ListaAsociadosPorEstado(
-            string estado, int numeroPagina, int tamanioPagina)
+    string estado, int numeroPagina, int tamanioPagina)
         {
-            var asociados = await _UoW.AsociadoRepository.GetAllByEstado(estado);
+            var asociados = await _UoW.AsociadoRepository.GetAllByEstado(estado)
+                              ?? new List<Asociado>();
 
-            if (asociados == null)
-            {
-                return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Failure("No se encontraron asociados con ese estado.");
-            }
-            if (!asociados.Any())
-            {
-                return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Failure("No hay asociados con ese estado.");
-            }
             var response = asociados.Select(a => new DatosFormularioAsociadoResponse(
                 a.AsociadoId,
                 a.Nombre,
@@ -85,8 +78,11 @@ namespace CSM_Gestion.Backend.Services.Impl
             )).ToList();
 
             var pagina = PaginacionHelper.Paginar(response, numeroPagina, tamanioPagina);
-            return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>.Success(pagina);
+
+            return Result<PaginacionResponse<DatosFormularioAsociadoResponse>>
+                    .Success(pagina);
         }
+
 
         public async Task<Result<DatosAsociadoResponse>> MostrarDatosAsociado(BuscarAsociadoRequest request)
         {
