@@ -1,4 +1,4 @@
-import { BrowserRouter,Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage } from '../pages/Home.page';
 import LoginPage from "../pages/Login.page.jsx";
 import { ProtectedRoute } from './protected.route';
@@ -19,7 +19,7 @@ export const RutasApp = () => {
                     <Route path='/pendientes' element={<ListaPendientes />} />
                     <Route path='/asociado/:id' element={<Detalle />} />
                 </Route>
-            </Routes>    
+            </Routes>
         </BrowserRouter>
     );
 }

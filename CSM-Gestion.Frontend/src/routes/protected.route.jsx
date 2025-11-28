@@ -9,7 +9,7 @@ export const ProtectedRoute = () => {
     try {
         const token = sessionStorage.getItem('admin');
         if (token) {
-            const tokenParsed= JSON.parse(token);
+            const tokenParsed = JSON.parse(token);
             isAuthenticated = !!tokenParsed;
         }
     }
@@ -20,10 +20,10 @@ export const ProtectedRoute = () => {
 
     useEffect(() => {
         if (!isAuthenticated) {
-            navigate('/', { replace: true });   
+            navigate('/', { replace: true });
         }
 
-    }, [isAuthenticated,navigate]);
+    }, [isAuthenticated, navigate]);
 
     if (!isAuthenticated) {
         return null;
