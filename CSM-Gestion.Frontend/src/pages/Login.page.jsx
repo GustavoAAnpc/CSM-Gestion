@@ -27,7 +27,7 @@ export default function Login() {
                         expira: data.value.expira,
                     })
                 );
-                navigate("/home");
+                navigate("/inicio");
             } else {
                 setError(data.message || "Credenciales inválidas");
             }
@@ -80,8 +80,8 @@ export default function Login() {
                         />
                     </div>
 
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         disabled={cargando}
                         className={`login-btn ${cargando ? 'loading' : ''}`}
                     >
