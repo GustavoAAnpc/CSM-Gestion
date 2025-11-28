@@ -1,5 +1,5 @@
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import '../pages/css/BaseLayout.css';
 
@@ -35,7 +35,7 @@ export const BaseLayout = ({ children }) => {
                         <i className="fas fa-hospital-alt"></i>
                         {!isCollapsed && <span>CSM-Gestión</span>}
                     </div>
-                    <button 
+                    <button
                         className="collapse-btn"
                         onClick={() => setIsCollapsed(!isCollapsed)}
                     >
@@ -46,44 +46,55 @@ export const BaseLayout = ({ children }) => {
                 <nav className="sidebar-nav">
                     <div className="nav-section">
                         <div className="nav-label">Principal</div>
-                        <NavLink 
-                            to="/inicio" 
-                            className={({ isActive }) => 
+                        <NavLink
+                            to="/inicio"
+                            className={({ isActive }) =>
                                 `nav-link ${isActive ? 'active' : ''}`
                             }
                             data-tooltip="Inicio"
-                            >
+                        >
                             <i className="fas fa-home"></i>
                             {!isCollapsed && <span>Inicio</span>}
-                            </NavLink>
+                        </NavLink>
 
-                            <NavLink 
-                            to="/buscar" 
-                            className={({ isActive }) => 
+                        <NavLink
+                            to="/registro"
+                            className={({ isActive }) =>
                                 `nav-link ${isActive ? 'active' : ''}`
                             }
-                            data-tooltip="Consultar Asociado"
-                            >
+                            data-tooltip="Registro"
+                        >
                             <i className="fas fa-file-medical"></i>
-                            {!isCollapsed && <span>Consultar Asociado</span>}
-                            </NavLink>
+                            {!isCollapsed && <span>Registro</span>}
+                        </NavLink>
 
-                            <NavLink 
-                            to="/pendientes" 
-                            className={({ isActive }) => 
+                        <NavLink
+                            to="/pendientes"
+                            className={({ isActive }) =>
                                 `nav-link ${isActive ? 'active' : ''}`
                             }
                             data-tooltip="Solicitudes Pendientes"
-                            >
+                        >
                             <i className="fas fa-file-medical"></i>
                             {!isCollapsed && <span>Solicitudes Pendientes</span>}
-                            </NavLink>
+                        </NavLink>
+
+                        <NavLink
+                            to="/buscar"
+                            className={({ isActive }) =>
+                                `nav-link ${isActive ? 'active' : ''}`
+                            }
+                            data-tooltip="Consultar Asociado"
+                        >
+                            <i className="fas fa-file-medical"></i>
+                            {!isCollapsed && <span>Consultar Asociado</span>}
+                        </NavLink>
                     </div>
-                    
+
                 </nav>
 
                 <div className="sidebar-footer">
-                    <button 
+                    <button
                         className="logout-btn"
                         onClick={handlerLogout}
                         title="Cerrar sesión"
@@ -94,7 +105,7 @@ export const BaseLayout = ({ children }) => {
                 </div>
             </aside>
 
-            
+
             <main className="main-content">
                 <header className="content-header">
                     <div className="header-left">
@@ -108,7 +119,7 @@ export const BaseLayout = ({ children }) => {
                         </div>
                     </div>
                 </header>
-                
+
                 <div className="content-wrapper">
                     {children}
                 </div>
@@ -122,7 +133,8 @@ function getPageTitle(pathname) {
     const titles = {
         '/inicio': 'Inicio',
         '/buscar': 'Buscar Asociado',
-        '/pendientes': 'Solicitudes Pendientes'
+        '/pendientes': 'Solicitudes Pendientes',
+        '/registro': 'Registro'
     };
     return titles[pathname] || 'Centro Social Mollebamba';
 }
